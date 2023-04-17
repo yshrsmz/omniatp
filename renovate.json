@@ -1,6 +1,20 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
+  "extends": ["config:base", ":pinDependencies", ":pinDevDependencies"],
+  "lockFileMaintenance": { "enabled": true },
+  "masterIssue": true,
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch",
+      "excludePackageNames": [
+      ]
+    },
+    {
+      "matchPackagePrefixes": ["@vitejs"],
+      "matchPackageNames": ["vite"],
+      "groupName": "vitejs"
+    }
   ]
 }
