@@ -1,4 +1,4 @@
-import { Chrome, escapeText } from './utils'
+import { Chrome } from './utils'
 
 export interface ChromeDelegate {
   currentPage(): Promise<chrome.tabs.Tab | null>
@@ -34,7 +34,7 @@ export class DefaultChromeDelegate implements ChromeDelegate {
 
   showDefaultSuggestion(message: string): void {
     this.chrome.omnibox.setDefaultSuggestion({
-      description: escapeText(message),
+      description: message,
     })
   }
 
