@@ -26,7 +26,7 @@ export default defineManifest(async (env) => {
       service_worker: 'src/background/index.ts',
       type: 'module',
     },
-    permissions: ['tabs', 'notifications', 'storage'],
+    permissions: ['activeTab', 'notifications', 'storage'],
     host_permissions: [],
     content_security_policy: {
       extension_pages: "script-src 'self'; object-src 'self'; img-src 'self'",
