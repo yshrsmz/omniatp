@@ -14,8 +14,8 @@ dependencies:
     specifier: 2.0.17
     version: 2.0.17(vue@3.2.47)
   consola:
-    specifier: 3.0.2
-    version: 3.0.2
+    specifier: 3.1.0
+    version: 3.1.0
   date-fns:
     specifier: 2.29.3
     version: 2.29.3
@@ -1163,8 +1163,8 @@ packages:
       - supports-color
     dev: true
 
-  /consola@3.0.2:
-    resolution: {integrity: sha512-o/Wau2FmZKiQgyp3c3IULgN6J5yc0lwYMnoyiZdEpdGxKGBtt2ACbkulBZ6BUsHy1HlSJqoP4YOyPIJLgRJyKQ==}
+  /consola@3.1.0:
+    resolution: {integrity: sha512-rrrJE6rP0qzl/Srg+C9x/AE5Kxfux7reVm1Wh0wCjuXvih6DqZgqDZe8auTD28fzJ9TF0mHlSDrPpWlujQRo1Q==}
     dev: false
 
   /cross-spawn@7.0.3:
