@@ -1,14 +1,38 @@
 <script setup lang="ts">
 import TheHeader from './components/TheHeader.vue'
 import SettingsList from './components/SettingsList/SettingsList.vue'
+import { onMounted, ref } from 'vue'
+import { createOptionsComponent } from './di/factory'
+import { AppBskyActorDefs } from '@atproto/api'
 
-const COMPONENT_NAME = 'App'
+const component = createOptionsComponent(chrome)
+
+const service = 'https://bsky.social'
+
+const isAuthorized = ref<boolean>(false)
+
+const profile = ref<AppBskyActorDefs.ProfileView>()
+
+onMounted(async () => {
+  const repo = component.bskyRepository()
+  await repo.resumeSession()
+
+  const p = await repo.getProfile()
+  console.log('profile', p)
+  profile.value = p
+})
 </script>
 
 <template>
-  <div :class="[COMPONENT_NAME, $style.module]">
+  <div :class="['App', $style.module]">
+    profile: {{ profile }}
     <TheHeader />
-    <SettingsList class="max-w-4xl w-full" />
+    <SettingsList
+      class="max-w-4xl w-full"
+      :service="service"
+      :is-authorized="isAuthorized"
+      :profile="profile"
+    />
   </div>
 </template>
 

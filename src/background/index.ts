@@ -1,11 +1,10 @@
-import { DefaultChromeDelegate } from '../ChromeDelegate'
-import { DefaultClock } from '../Clock'
-import { OmniATP } from './OmniATP'
+import { createBackgroundComponent } from '../di/factory'
 
 declare const self: ServiceWorkerGlobalScope
 export {}
 
-const omniatp = new OmniATP(new DefaultClock())
+const component = createBackgroundComponent(chrome)
+component.omniatp().initialize()
 
 chrome.runtime.onInstalled.addListener(async (detail) => {
   await self.skipWaiting()
@@ -21,11 +20,11 @@ chrome.runtime.onInstalled.addListener(async (detail) => {
 chrome.omnibox.onInputChanged.addListener((text) => {
   console.log('onInputChanged', text)
 
-  omniatp.handleInputChengedEvent(text, new DefaultChromeDelegate(chrome))
+  component.omniatp().handleInputChengedEvent(text)
 })
 
 chrome.omnibox.onInputEntered.addListener((text) => {
   console.log('onInputEntered', text)
 
-  omniatp.handleInputEnteredEvent(text, new DefaultChromeDelegate(chrome))
+  component.omniatp().handleInputEnteredEvent(text)
 })

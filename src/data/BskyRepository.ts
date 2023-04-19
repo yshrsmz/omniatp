@@ -3,24 +3,29 @@ import {
   AtpSessionEvent,
   BskyAgent,
   RichText,
+  AppBskyActorDefs,
 } from '@atproto/api'
-import { XRPCError } from '@atproto/xrpc'
 import { LoginCredential } from './model/LoginCredential'
-import { BskyLocalGateway } from './BskyLocalGateway'
-import { ResponseError } from './model/Errors'
-import { Result } from './model/Result'
+import { ConfigLocalGateway } from './ConfigLocalGateway'
 
 export interface BskyRepository {
   login(credential: LoginCredential): Promise<void>
+
   resumeSession(): Promise<void>
+  hasSession(): boolean
+  getSession(): Promise<AtpSessionData | undefined>
+
+  getProfile(): Promise<AppBskyActorDefs.ProfileView | undefined>
+
+  createRichText(text: string): Promise<RichText>
   createPost(text: string): Promise<void>
 }
 
 export class DefaultBskyRepository implements BskyRepository {
   readonly agent: BskyAgent
-  readonly localGateway: BskyLocalGateway
+  readonly localGateway: ConfigLocalGateway
 
-  constructor(localGateway: BskyLocalGateway) {
+  constructor(localGateway: ConfigLocalGateway) {
     this.localGateway = localGateway
     this.agent = new BskyAgent({
       service: 'https://bsky.social',
@@ -53,9 +58,34 @@ export class DefaultBskyRepository implements BskyRepository {
     }
   }
 
-  async createPost(text: string): Promise<void> {
+  hasSession(): boolean {
+    return this.agent.hasSession
+  }
+
+  getSession(): Promise<AtpSessionData | undefined> {
+    return this.localGateway.getSession()
+  }
+
+  async getProfile(): Promise<AppBskyActorDefs.ProfileView | undefined> {
+    const session = await this.localGateway.getSession()
+    if (session) {
+      const res = await this.agent.getProfile({ actor: session.did })
+      return res.data
+    } else {
+      return undefined
+    }
+  }
+
+  async createRichText(text: string, detectFacets = false): Promise<RichText> {
     const result = new RichText({ text })
-    await result.detectFacets(this.agent)
+    if (detectFacets) {
+      await result.detectFacets(this.agent)
+    }
+    return result
+  }
+
+  async createPost(text: string): Promise<void> {
+    const result = await this.createRichText(text, true)
     await this.agent.post({
       text: result.text,
       facets: result.facets,

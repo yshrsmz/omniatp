@@ -1,8 +1,9 @@
-import { Chrome } from './utils'
+import { Chrome, escapeText } from '../utils'
 
 export interface ChromeDelegate {
-  currentPage(): Promise<chrome.tabs.Tab | null>
+  currentPage(): Promise<chrome.tabs.Tab | undefined>
   appVersion(): string
+  appName(): string
   showDefaultSuggestion(message: string): void
   openNewTab(url: string, active: boolean): void
   openOptionsPage(): void
@@ -15,13 +16,13 @@ export interface ChromeDelegate {
 export class DefaultChromeDelegate implements ChromeDelegate {
   constructor(private readonly chrome: Chrome) {}
 
-  async currentPage(): Promise<chrome.tabs.Tab | null> {
+  async currentPage(): Promise<chrome.tabs.Tab | undefined> {
     return new Promise((resolve) => {
       this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length > 0) {
           resolve(tabs[0])
         } else {
-          resolve(null)
+          resolve(undefined)
         }
       })
     })
@@ -32,9 +33,14 @@ export class DefaultChromeDelegate implements ChromeDelegate {
     return manifest.version_name ?? manifest.version
   }
 
+  appName(): string {
+    const manifest = this.chrome.runtime.getManifest()
+    return manifest.name
+  }
+
   showDefaultSuggestion(message: string): void {
     this.chrome.omnibox.setDefaultSuggestion({
-      description: message,
+      description: escapeText(message),
     })
   }
 
@@ -48,12 +54,12 @@ export class DefaultChromeDelegate implements ChromeDelegate {
 
   createNotification(iconUrl: string, title: string, message: string): void {
     this.chrome.notifications.create(
-      'omnitweety',
+      'OmniATP',
       {
         type: 'basic',
-        iconUrl: iconUrl,
-        title: title,
-        message: message,
+        iconUrl,
+        title,
+        message,
       },
       (id) => {
         setTimeout(() => {
