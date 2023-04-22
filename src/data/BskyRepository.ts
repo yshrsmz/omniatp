@@ -9,7 +9,8 @@ import { LoginCredential } from './model/LoginCredential'
 import { ConfigLocalGateway } from './ConfigLocalGateway'
 
 export interface BskyRepository {
-  login(credential: LoginCredential): Promise<void>
+  signIn(credential: LoginCredential): Promise<void>
+  signOut(): Promise<void>
 
   resumeSession(): Promise<void>
   hasSession(): boolean
@@ -33,12 +34,14 @@ export class DefaultBskyRepository implements BskyRepository {
         console.log('persistSession', event, session)
         if (session) {
           this.localGateway.saveSession(session)
+        } else {
+          this.localGateway.clearSession()
         }
       },
     })
   }
 
-  async login(credential: LoginCredential): Promise<void> {
+  async signIn(credential: LoginCredential): Promise<void> {
     const res = await this.agent.login({
       identifier: credential.identifier,
       password: credential.password,
@@ -48,6 +51,11 @@ export class DefaultBskyRepository implements BskyRepository {
     if (res.success && res.data) {
       await this.localGateway.saveSession(res.data)
     }
+  }
+
+  async signOut(): Promise<void> {
+    this.agent.session = undefined
+    await this.localGateway.clearSession()
   }
 
   async resumeSession(): Promise<void> {
