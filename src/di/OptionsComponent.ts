@@ -2,6 +2,7 @@ import { OmniATP } from '../background/OmniATP'
 import { Options, Share, SubCommand, Version } from '../background/SubCommands'
 import { BskyRepository } from '../data/BskyRepository'
 import { PostTemplateRepository } from '../data/PostTemplateRepository'
+import { ChromeDelegate } from '../platform/ChromeDelegate'
 import { DataModule } from './DataModule'
 import { PlatformModule } from './PlatformModule'
 import { getOrCreate } from './helper'
@@ -9,6 +10,7 @@ import { getOrCreate } from './helper'
 export interface OptionsComponent {
   bskyRepository(): BskyRepository
   postTemplateRepository(): PostTemplateRepository
+  chromeDelegate(): ChromeDelegate
 }
 
 export class DefaultOptionsComponent implements OptionsComponent {
@@ -38,5 +40,9 @@ export class DefaultOptionsComponent implements OptionsComponent {
         ),
       (v) => (this._postTemplateRepository = v)
     )
+  }
+
+  chromeDelegate(): ChromeDelegate {
+    return this.platformModule.chromeDelegate()
   }
 }

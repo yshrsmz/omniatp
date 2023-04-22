@@ -21,4 +21,8 @@ export class PostTemplate {
 
     return result
   }
+
+  public static empty(): PostTemplate {
+    return new PostTemplate('')
+  }
 }

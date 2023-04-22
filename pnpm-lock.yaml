@@ -19,6 +19,9 @@ dependencies:
   date-fns:
     specifier: 2.29.3
     version: 2.29.3
+  vest:
+    specifier: 4.6.9
+    version: 4.6.9
   vue:
     specifier: 3.2.47
     version: 3.2.47
@@ -1466,6 +1469,12 @@ packages:
       upper-case: 2.0.2
     dev: true
 
+  /context@3.0.5:
+    resolution: {integrity: sha512-17Rn7zjef28xrbV3iXgtkL9H3WvoT+Lsg/ldBluuU95ZXshVDWC+va2nO2ex2mBtLKkz0TXroQlEBo5xfDxCJg==}
+    dependencies:
+      vest-utils: 0.1.0
+    dev: false
+
   /crelt@1.0.5:
     resolution: {integrity: sha512-+BO9wPPi+DWTDcNYhr/W90myha8ptzftZT+LwcmUbbok0rcP/fequmFYCw8NMoH7pkAZQzU78b3kYrlua5a9eA==}
     dev: true
@@ -2637,6 +2646,13 @@ packages:
       thenify-all: 1.6.0
     dev: true
 
+  /n4s@4.3.5:
+    resolution: {integrity: sha512-8Ce3P2GnxDd1Viru3gPS6YDiRrh1d/6pguNnqQU43HVdXaSIJbr/tp9OMhHPawAqGuzOui2r3wWkOIPLfF4jhg==}
+    dependencies:
+      context: 3.0.5
+      vest-utils: 0.1.0
+    dev: false
+
   /nanoid@3.3.6:
     resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -3508,6 +3524,25 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
     dev: true
+
+  /vast@1.0.15:
+    resolution: {integrity: sha512-5nh9nRJ7VCplmR+mS6zNV4RYbyHYcr6tgatNqnNq5T4FXujAci4rbC3AUsLYX9QI+AQz01q1ZtYru7yRqIg52A==}
+    dependencies:
+      vest-utils: 0.1.0
+    dev: false
+
+  /vest-utils@0.1.0:
+    resolution: {integrity: sha512-sVyYHhY0jPF44eTDYG1+Y3NCIDrHViyLgpXlGC8YTtZDPUQL4ROl+lmx3rnyT4YC6Y0rZCGb1lwE5blrdYvXlA==}
+    dev: false
+
+  /vest@4.6.9:
+    resolution: {integrity: sha512-X7RdiGmvR1kCZtbngs3LeOeR2X6s2hHCo+OircJh03Ex6ARByGz3iQd1NoVkooAq/q7LRndkpmE27VnTA6dGmQ==}
+    dependencies:
+      context: 3.0.5
+      n4s: 4.3.5
+      vast: 1.0.15
+      vest-utils: 0.1.0
+    dev: false
 
   /vite-node@0.28.4:
     resolution: {integrity: sha512-KM0Q0uSG/xHHKOJvVHc5xDBabgt0l70y7/lWTR7Q0pR5/MrYxadT+y32cJOE65FfjGmJgxpVEEY+69btJgcXOQ==}

@@ -1,26 +1,54 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import SettingsListItem from './SettingsListItem.vue'
-import AuthDialog from './AuthDialog.vue'
+import SignInDialog from './SignInDialog.vue'
 import { AppBskyActorDefs } from '@atproto/api'
+import SignOutDialog from './SignOutDialog.vue'
+import { AuthProgress } from '../../data/model/AuthProgress'
+import { LoginCredential } from '../../data/model/LoginCredential'
 
 const props = defineProps<{
-  isAuthorized: boolean
   service: string
   profile?: AppBskyActorDefs.ProfileView
+  progress: AuthProgress
 }>()
 
 const emit = defineEmits<{
-  (event: 'signin'): void
+  (event: 'signin', value: LoginCredential): void
   (event: 'signout'): void
+  (event: 'update:progress', value: AuthProgress): void
 }>()
 
-const isAuthorized = computed(() => props.isAuthorized && !!props.profile)
+const showSignInDialogRef = ref(false)
+const showSignOutDialogRef = ref(false)
 
-const showAuthDialogRef = ref(false)
+const showSignInDialog = computed({
+  get: () => {
+    if (props.progress.type === 'IN_PROGRESS') return true
+    if (props.progress.type === 'AUTHORIZED') return false
+
+    return showSignInDialogRef.value
+  },
+  set: (v) => {
+    showSignInDialogRef.value = v
+    emit('update:progress', AuthProgress.UNAUTHORIZED())
+  },
+})
 
 const handleSignInClick = () => {
-  showAuthDialogRef.value = true
+  showSignInDialogRef.value = true
+}
+
+const handleSignOutClick = () => {
+  showSignOutDialogRef.value = true
+}
+
+const handleSignIn = (value: LoginCredential) => {
+  emit('signin', value)
+}
+
+const handleSignOut = () => {
+  emit('signout')
 }
 </script>
 
@@ -28,7 +56,7 @@ const handleSignInClick = () => {
   <SettingsListItem>
     <div class="flex flex-row justify-between items-center">
       <div>
-        <div v-if="!isAuthorized" class="flex py-4">
+        <div v-if="progress.type !== 'AUTHORIZED'" class="flex py-4">
           <p>Not Authorized, please sign in first.</p>
         </div>
         <div v-else class="flex py-4">
@@ -43,9 +71,10 @@ const handleSignInClick = () => {
       </div>
       <div>
         <button
-          v-if="isAuthorized"
+          v-if="progress.type === 'AUTHORIZED'"
           :class="[$style.AuthButton, $style.__signout]"
           type="button"
+          @click="handleSignOutClick"
         >
           Sign out
         </button>
@@ -59,7 +88,18 @@ const handleSignInClick = () => {
         </button>
       </div>
     </div>
-    <AuthDialog v-model:show="showAuthDialogRef" :service="service" />
+    <SignInDialog
+      v-if="showSignInDialog"
+      v-model:show="showSignInDialog"
+      :service="service"
+      :progress="progress"
+      @signin="handleSignIn"
+    />
+    <SignOutDialog
+      v-if="showSignOutDialogRef"
+      v-model:show="showSignOutDialogRef"
+      @signout="handleSignOut"
+    />
   </SettingsListItem>
 </template>
 

@@ -8,6 +8,7 @@ export interface ConfigLocalGateway {
 
   saveSession(session: AtpSessionData): Promise<void>
   getSession(): Promise<AtpSessionData | undefined>
+  clearSession(): Promise<void>
 }
 
 export class DefaultConfigLocalGateway implements ConfigLocalGateway {
@@ -37,5 +38,9 @@ export class DefaultConfigLocalGateway implements ConfigLocalGateway {
       session: null as AtpSessionData | null,
     })
     return session ?? undefined
+  }
+
+  async clearSession(): Promise<void> {
+    await this.storage.remove(['session'])
   }
 }

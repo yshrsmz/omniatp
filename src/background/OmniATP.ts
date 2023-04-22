@@ -3,7 +3,6 @@ import { Clock } from '../Clock'
 import { BskyRepository } from '../data/BskyRepository'
 import { SubCommand } from './SubCommands'
 import { XRPCError } from '@atproto/xrpc'
-import { PostTemplateRepository } from '../data/PostTemplateRepository'
 
 const extractError = (
   e: unknown
@@ -39,6 +38,7 @@ export class OmniATP {
     }
 
     try {
+      console.log('postStatus', message)
       await this.bskyRepository.createPost(message)
       this.chrome.createNotification(
         './src/assets/icon_128.png',
@@ -58,7 +58,7 @@ export class OmniATP {
   async handleInputChengedEvent(text: string) {
     if (!this.bskyRepository.hasSession()) {
       this.chrome.showDefaultSuggestion(
-        'To use OmniATP, please login first(press Enter to login)'
+        'To use OmniATP, please sign in first(press Enter to sign in)'
       )
       return
     }
