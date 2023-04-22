@@ -1,0 +1,17 @@
+## Single purpose
+
+Create a post to Bluesky, without leaving your current tab. You can just update status from the Omnibox(a.k.a. URL bar or Address bar)!
+
+## Permission justification
+
+### tabs
+
+tabs is used to get a current tab's title and url so that the extension can share these to Bluesky. "activeTab" permission does not work in this case as this extension is triggered via the omnibox, with "at" hot word. And in this scenario we can't retrieve active tab's URL & title with "activeTab" permission.
+
+### notifications
+
+notification is only used to let users know that status is successfully updated.
+
+### storage
+
+storage is necessary to store user's access token and other settings.

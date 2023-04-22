@@ -33,7 +33,7 @@ export default defineManifest(async (env) => {
     permissions: ['tabs', 'notifications', 'storage'],
     host_permissions: [],
     content_security_policy: {
-      extension_pages: "script-src 'self'; object-src 'self'; img-src 'self'",
+      extension_pages: "script-src 'self'; object-src 'self';",
     },
   }
 })

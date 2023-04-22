@@ -1,0 +1,12 @@
+Create a post to Bluesky, without leaving your current tab. You can just update status from the Omnibox(a.k.a. URL bar or Address bar)!
+
+
+Type 'at' + [space/tab] in the omnibox, then write your status & hit Enter to post.
+Type 'at' + [space/tab] + ':share' to share currently browsing page.
+Type 'at' + [space/tab] + ':share' + [space] + [type anything] to share url with your comment.
+Type 'at' + [space/tab] + ':options' to open options page.
+Type 'at' + [space/tab] + ':version' to check version.
+
+Once you install the extension, the options page is automatically opend, and you needd to sign in to Bluesky.
+
+OmniATP is an open source software, you can access its code from https://github.com/yshrsmz/omniatp
