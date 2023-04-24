@@ -21,7 +21,7 @@ const isAuthorized = ref<boolean>(false)
 
 const profile = ref<AppBskyActorDefs.ProfileView>()
 
-const authProgress = ref<AuthProgress>(AuthProgress.UNAUTHORIZED())
+const authProgress = ref<AuthProgress>(AuthProgress.INITIALIZING())
 
 const postTemplate = computed<PostTemplate>({
   get: () => _postTemplate.value,
@@ -63,23 +63,29 @@ onMounted(async () => {
   authProgress.value = p
     ? AuthProgress.AUTHORIZED()
     : AuthProgress.UNAUTHORIZED()
+
+  _postTemplate.value = await component.postTemplateRepository().get()
 })
 </script>
 
 <template>
-  <div class="App flex flex-col items-center min-h-screen bg-gray-50 pb-10">
+  <div
+    class="App flex flex-col items-center min-h-screen bg-gray-50 pb-10 min-h-screen"
+  >
     <TheHeader />
-    <SettingsList
-      v-model:post-template="postTemplate"
-      v-model:auth-progress="authProgress"
-      class="max-w-4xl w-full"
-      :service="service"
-      :app-version="appVersion"
-      :developer="developer"
-      :is-authorized="isAuthorized"
-      :profile="profile"
-      @signin="handleSignIn"
-      @signout="handleSignOut"
-    />
+    <main class="max-w-4xl w-full flex-grow">
+      <SettingsList
+        v-model:post-template="postTemplate"
+        v-model:auth-progress="authProgress"
+        class="w-full"
+        :service="service"
+        :app-version="appVersion"
+        :developer="developer"
+        :is-authorized="isAuthorized"
+        :profile="profile"
+        @signin="handleSignIn"
+        @signout="handleSignOut"
+      />
+    </main>
   </div>
 </template>

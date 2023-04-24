@@ -56,6 +56,9 @@ const handleSignOut = () => {
   <SettingsListItem>
     <div class="flex flex-row justify-between items-center">
       <div>
+        <div v-if="progress.type === 'INITIALIZING'" class="flex py-4">
+          <p>Loading, please wait...</p>
+        </div>
         <div v-if="progress.type !== 'AUTHORIZED'" class="flex py-4">
           <p>Not Authorized, please sign in first.</p>
         </div>
@@ -69,7 +72,7 @@ const handleSignOut = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div v-if="progress.type !== 'INITIALIZING'">
         <button
           v-if="progress.type === 'AUTHORIZED'"
           :class="[$style.AuthButton, $style.__signout]"
