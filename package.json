@@ -11,7 +11,7 @@
     "lint:fix": "eslint --fix --ext .ts,.js,.vue,.cjs . && prettier -w ."
   },
   "dependencies": {
-    "@atproto/api": "0.2.8",
+    "@atproto/api": "0.2.9",
     "@atproto/xrpc": "0.1.0",
     "@headlessui/vue": "1.7.13",
     "@heroicons/vue": "2.0.17",

@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@atproto/api':
-    specifier: 0.2.8
-    version: 0.2.8
+    specifier: 0.2.9
+    version: 0.2.9
   '@atproto/xrpc':
     specifier: 0.1.0
     version: 0.1.0
@@ -98,8 +98,8 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: true
 
-  /@atproto/api@0.2.8:
-    resolution: {integrity: sha512-LfPgtf3UNg2W/AxHkJMJrLNT9QAD6bi16Sw5Zt3mgANrDnHWGygA7gRpeNdgVI+kFEhQfrIItemJvWLIB9BJDQ==}
+  /@atproto/api@0.2.9:
+    resolution: {integrity: sha512-r00IqidX2YF3VUEa4MUO2Vxqp3+QhI1cSNcWgzT4LsANapzrwdDTM+rY2Ejp9na3F+unO4SWRW3o434cVmG5gw==}
     dependencies:
       '@atproto/common-web': 0.1.0
       '@atproto/uri': 0.0.2
