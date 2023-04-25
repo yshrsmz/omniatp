@@ -59,7 +59,7 @@ const handleSignOut = () => {
         <div v-if="progress.type === 'INITIALIZING'" class="flex py-4">
           <p>Loading, please wait...</p>
         </div>
-        <div v-if="progress.type !== 'AUTHORIZED'" class="flex py-4">
+        <div v-else-if="progress.type !== 'AUTHORIZED'" class="flex py-4">
           <p>Not Authorized, please sign in first.</p>
         </div>
         <div v-else class="flex py-4">
