@@ -9,6 +9,9 @@ export interface ConfigLocalGateway {
   saveSession(session: AtpSessionData): Promise<void>
   getSession(): Promise<AtpSessionData | undefined>
   clearSession(): Promise<void>
+  onSessionUpdate(
+    listener: (newValue?: AtpSessionData, oldValue?: AtpSessionData) => void
+  ): void
 }
 
 export class DefaultConfigLocalGateway implements ConfigLocalGateway {
@@ -29,7 +32,8 @@ export class DefaultConfigLocalGateway implements ConfigLocalGateway {
     await this.storage.remove(['postPrefix'])
   }
 
-  saveSession(session: AtpSessionData): Promise<void> {
+  async saveSession(session: AtpSessionData): Promise<void> {
+    console.log('saveSession', session)
     return this.storage.save({ session })
   }
 
@@ -41,6 +45,18 @@ export class DefaultConfigLocalGateway implements ConfigLocalGateway {
   }
 
   async clearSession(): Promise<void> {
+    console.log('clearSession')
     await this.storage.remove(['session'])
+  }
+
+  onSessionUpdate(
+    listener: (newValue?: AtpSessionData, oldValue?: AtpSessionData) => void
+  ) {
+    this.storage.onChanged((changes) => {
+      const { session } = changes
+      if (session) {
+        listener(session.newValue, session.oldValue)
+      }
+    })
   }
 }

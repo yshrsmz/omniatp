@@ -15,6 +15,9 @@ export interface BskyRepository {
   resumeSession(): Promise<void>
   hasSession(): boolean
   getSession(): Promise<AtpSessionData | undefined>
+  onSessionUpdate(
+    listner: (newValue?: AtpSessionData, oldValue?: AtpSessionData) => void
+  ): void
 
   getProfile(): Promise<AppBskyActorDefs.ProfileView | undefined>
 
@@ -32,13 +35,47 @@ export class DefaultBskyRepository implements BskyRepository {
       service: 'https://bsky.social',
       persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
         console.log('persistSession', event, session)
-        if (session) {
-          this.localGateway.saveSession(session)
-        } else {
+        if (session && event !== 'create') {
+          this.saveSessionIfNeeded(session)
+          return
+        }
+
+        if (!session) {
           this.localGateway.clearSession()
         }
       },
     })
+  }
+
+  /**
+   * |                    | new undefined | new exists |
+   * |--------------------|---------------|------------|
+   * | current: undefined |       x       |     o      |
+   * | current: exits     |       o       |     A      |
+   *
+   * diffrent: save
+   * same: do nothing
+   */
+  async saveSessionIfNeeded(session: AtpSessionData | undefined) {
+    const current = await this.getSession()
+
+    let shouldSave
+    if (session && current) {
+      // new session exists, and saved session exists
+      const entries = Object.entries(session) as Array<
+        [keyof AtpSessionData, AtpSessionData[keyof AtpSessionData]]
+      >
+      // some fields are different
+      shouldSave = entries.some(([key, value]) => current[key] !== value)
+    } else {
+      // either or both sessions are undefined
+      shouldSave = !!session
+    }
+
+    console.log('saveSessionIfNeeded: ', shouldSave, session)
+    if (shouldSave && session) {
+      await this.localGateway.saveSession(session)
+    }
   }
 
   async signIn(credential: LoginCredential): Promise<void> {
@@ -48,8 +85,10 @@ export class DefaultBskyRepository implements BskyRepository {
     })
 
     console.log('login', res)
+    // credential should already be saved via persistSession callback,
+    // but should be saved here as well so that subsequent call can safely access bsky API
     if (res.success && res.data) {
-      await this.localGateway.saveSession(res.data)
+      await this.saveSessionIfNeeded(res.data)
     }
   }
 
@@ -74,8 +113,18 @@ export class DefaultBskyRepository implements BskyRepository {
     return this.localGateway.getSession()
   }
 
+  onSessionUpdate(
+    listner: (
+      newValue?: AtpSessionData | undefined,
+      oldValue?: AtpSessionData | undefined
+    ) => void
+  ): void {
+    this.localGateway.onSessionUpdate(listner)
+  }
+
   async getProfile(): Promise<AppBskyActorDefs.ProfileView | undefined> {
     const session = await this.localGateway.getSession()
+    console.log('getProfile', session)
     if (session) {
       const res = await this.agent.getProfile({ actor: session.did })
       return res.data

@@ -30,6 +30,17 @@ export class OmniATP {
       // not resumeable
       console.error(e)
     }
+
+    this.bskyRepository.onSessionUpdate((newValue, _oldValue) => {
+      if (!this.bskyRepository.hasSession() && newValue) {
+        this.bskyRepository.resumeSession()
+        return
+      }
+
+      if (!newValue) {
+        this.bskyRepository.signOut()
+      }
+    })
   }
 
   async postStatus(message: string) {
