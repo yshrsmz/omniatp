@@ -5,9 +5,9 @@ export class PostTemplate {
   constructor(readonly prefix: string) {}
 
   buildPost(userInput: string, title: string, url: string): string {
-    const prefix = userInput || this.prefix
+    const prefix = userInput ? `${userInput}\n` : this.prefix
     const baseMessage = `${prefix} ${title}`
-    const baseResult = `${baseMessage} ${url}`
+    const baseResult = `${baseMessage}\n${url}`
 
     const rt = new RichText({ text: baseResult })
 
@@ -16,7 +16,7 @@ export class PostTemplate {
       result = baseResult
     } else {
       const diff = BskyConfig.maxPostLength - rt.graphemeLength
-      result = `${baseMessage.slice(0, diff)} ${url}`
+      result = `${baseMessage.slice(0, diff)}\n${url}`
     }
 
     return result

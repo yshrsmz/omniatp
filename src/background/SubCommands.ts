@@ -1,5 +1,11 @@
 import { PostTemplateRepository } from '../data/PostTemplateRepository'
+import { LinkMeta } from '../data/model/LinkMeta'
 import { ChromeDelegate } from '../platform/ChromeDelegate'
+
+export interface Payload {
+  message: string
+  meta?: LinkMeta
+}
 
 export interface SubCommand {
   name: string
@@ -13,7 +19,7 @@ export interface SubCommand {
   handleEnterEvent: (
     command: string,
     chrome: ChromeDelegate
-  ) => Promise<string | undefined>
+  ) => Promise<Payload | undefined>
 }
 
 export class Options implements SubCommand {
@@ -51,8 +57,13 @@ export class Version implements SubCommand {
     chrome.showDefaultSuggestion(this.buildVersionString(chrome))
   }
 
-  async handleEnterEvent(command: string, chrome: ChromeDelegate) {
-    return this.buildVersionString(chrome)
+  async handleEnterEvent(
+    command: string,
+    chrome: ChromeDelegate
+  ): Promise<Payload | undefined> {
+    return {
+      message: this.buildVersionString(chrome),
+    }
   }
 }
 
@@ -68,32 +79,48 @@ export class Share implements SubCommand {
     return /^:share(\s*|\s+[\w\W]*)$/i.test(command)
   }
 
-  async buildShareMessage(command: string, chrome: ChromeDelegate) {
+  extractUserInput(command: string): string | null {
+    const match = /^:share\s+([\w\W]+)$/i.exec(command)
+    if (match && match.length > 1) {
+      return match[1]
+    } else {
+      return null
+    }
+  }
+
+  async buildShareMessage(
+    command: string,
+    chrome: ChromeDelegate
+  ): Promise<Payload> {
     const currentPage = await chrome.currentPage()
     const template = await this.postTemplateRepository.get()
 
     let message = 'unable to share this page'
+    let meta: LinkMeta | undefined = undefined
     if (currentPage && currentPage.url && currentPage.title) {
-      const userInput = (() => {
-        const match = /^:share\s+([\w\W]+)$/i.exec(command)
-        if (match && match.length > 1) {
-          return match[1]
-        } else {
-          return null
-        }
-      })()
+      const userInput = this.extractUserInput(command)
 
       message = template.buildPost(
         userInput ?? '',
         currentPage.title,
         currentPage.url
       )
+      meta = {
+        uri: currentPage.url,
+        title: currentPage.title,
+        description: '',
+      }
     }
-    return message
+
+    return {
+      message,
+      meta,
+    }
   }
 
   async handleInputEvent(command: string, chrome: ChromeDelegate) {
-    chrome.showDefaultSuggestion(await this.buildShareMessage(command, chrome))
+    const payload = await this.buildShareMessage(command, chrome)
+    chrome.showDefaultSuggestion(payload.message)
   }
 
   async handleEnterEvent(command: string, chrome: ChromeDelegate) {

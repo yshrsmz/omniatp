@@ -4,9 +4,11 @@ import {
   BskyAgent,
   RichText,
   AppBskyActorDefs,
+  AppBskyEmbedExternal,
 } from '@atproto/api'
 import { LoginCredential } from './model/LoginCredential'
 import { ConfigLocalGateway } from './ConfigLocalGateway'
+import { LinkMeta } from './model/LinkMeta'
 
 export interface BskyRepository {
   signIn(credential: LoginCredential): Promise<void>
@@ -22,7 +24,8 @@ export interface BskyRepository {
   getProfile(): Promise<AppBskyActorDefs.ProfileView | undefined>
 
   createRichText(text: string): Promise<RichText>
-  createPost(text: string): Promise<void>
+  createPost(text: string, meta?: LinkMeta): Promise<void>
+  createPostWithLink(text: string, meta: LinkMeta): Promise<void>
 }
 
 export class DefaultBskyRepository implements BskyRepository {
@@ -141,11 +144,23 @@ export class DefaultBskyRepository implements BskyRepository {
     return result
   }
 
-  async createPost(text: string): Promise<void> {
+  async createPost(text: string, meta: LinkMeta): Promise<void> {
     const result = await this.createRichText(text, true)
+
+    let embed: AppBskyEmbedExternal.Main | undefined = undefined
+    if (meta) {
+      embed = {
+        external: {
+          ...meta,
+        },
+        $type: 'app.bsky.embed.external',
+      }
+    }
+
     await this.agent.post({
       text: result.text,
       facets: result.facets,
+      embed,
     })
   }
 }

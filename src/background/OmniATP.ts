@@ -1,8 +1,9 @@
 import { ChromeDelegate } from '../platform/ChromeDelegate'
 import { Clock } from '../Clock'
 import { BskyRepository } from '../data/BskyRepository'
-import { SubCommand } from './SubCommands'
+import { Payload, SubCommand } from './SubCommands'
 import { XRPCError } from '@atproto/xrpc'
+import { LinkMeta } from '../data/model/LinkMeta'
 
 const extractError = (
   e: unknown
@@ -43,18 +44,20 @@ export class OmniATP {
     })
   }
 
-  async postStatus(message: string) {
-    if (!message) {
+  async postStatus(payload: Payload) {
+    if (!payload.message) {
       return
     }
 
     try {
-      console.log('postStatus', message)
-      await this.bskyRepository.createPost(message)
+      console.log('postStatus', payload)
+
+      await this.bskyRepository.createPost(payload.message, payload.meta)
+
       this.chrome.createNotification(
         './src/assets/icon_128.png',
         this.chrome.appName(),
-        message
+        payload.message
       )
     } catch (e) {
       const { status, error } = extractError(e)
@@ -91,15 +94,15 @@ export class OmniATP {
       return
     }
 
-    let message: string | undefined = text
+    let payload: Payload | undefined = { message: text }
 
     const subCommand = this.subCommands.find((c) => c.test(text))
     if (subCommand) {
-      message = await subCommand.handleEnterEvent(text, this.chrome)
+      payload = await subCommand.handleEnterEvent(text, this.chrome)
     }
 
-    if (message) {
-      await this.postStatus(message)
+    if (payload) {
+      await this.postStatus(payload)
     }
   }
 }
