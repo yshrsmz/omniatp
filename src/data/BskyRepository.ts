@@ -25,7 +25,6 @@ export interface BskyRepository {
 
   createRichText(text: string): Promise<RichText>
   createPost(text: string, meta?: LinkMeta): Promise<void>
-  createPostWithLink(text: string, meta: LinkMeta): Promise<void>
 }
 
 export class DefaultBskyRepository implements BskyRepository {
