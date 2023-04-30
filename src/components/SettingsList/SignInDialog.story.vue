@@ -8,7 +8,7 @@ const service = BskyConfig.service
 </script>
 
 <template>
-  <Story>
+  <Story title="components/SettingsList/SignInDialog">
     <Variant title="UNAUTHORIZED">
       <SignInDialog
         :show="true"
