@@ -17,6 +17,7 @@ const props = defineProps<{
   postTemplate: PostTemplate
   appVersion: string
   developer: Developer
+  storeUrl: string
   authProgress: AuthProgress
 }>()
 
@@ -63,6 +64,9 @@ const handleUpdatePrefix = (prefix: string) => {
       <SettingsListItem as="a" :href="developer.url" target="_blank">
         <p>Developer</p>
         <template #subtext>{{ developer.name }}</template>
+      </SettingsListItem>
+      <SettingsListItem as="a" :href="storeUrl" target="_blank">
+        <p>Rate on Chrome Web Store</p>
       </SettingsListItem>
     </ul>
   </div>

@@ -16,6 +16,7 @@ const _postTemplate = ref<PostTemplate>(PostTemplate.empty())
 const service = BskyConfig.service
 const appVersion = component.chromeDelegate().appVersion()
 const developer = AppConfig.developer
+const storeUrl = component.chromeDelegate().storeUrl()
 
 const isAuthorized = ref<boolean>(false)
 
@@ -81,6 +82,7 @@ onMounted(async () => {
         :service="service"
         :app-version="appVersion"
         :developer="developer"
+        :store-url="storeUrl"
         :is-authorized="isAuthorized"
         :profile="profile"
         @signin="handleSignIn"

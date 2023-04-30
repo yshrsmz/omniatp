@@ -8,6 +8,7 @@ export interface ChromeDelegate {
   openNewTab(url: string, active: boolean): void
   openOptionsPage(): void
   createNotification(iconUrl: string, title: string, message: string): void
+  storeUrl(): string
   onStorageChanged(
     listener: (changes: { [key: string]: chrome.storage.StorageChange }) => void
   ): void
@@ -67,6 +68,10 @@ export class DefaultChromeDelegate implements ChromeDelegate {
         }, 3000)
       }
     )
+  }
+
+  storeUrl(): string {
+    return `https://chrome.google.com/webstore/detail/${this.chrome.runtime.id}`
   }
 
   onStorageChanged(

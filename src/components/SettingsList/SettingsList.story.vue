@@ -20,6 +20,8 @@ const appVersion = '1.0.0'
 
 const postTemplate = new PostTemplate('NowBrowsing: ')
 const authProgress = ref<AuthProgress>({ type: 'UNAUTHORIZED' })
+const storeUrl =
+  'https://chrome.google.com/webstore/detail/omniatp/ngfefjjphfmafhmhbpjccedmkbbcmngf'
 </script>
 
 <template>
@@ -32,6 +34,7 @@ const authProgress = ref<AuthProgress>({ type: 'UNAUTHORIZED' })
         :app-version="appVersion"
         :post-template="postTemplate"
         :developer="AppConfig.developer"
+        :store-url="storeUrl"
         :auth-progress="authProgress"
         @signin="logEvent('signin', $event)"
         @signout="logEvent('signout', $event)"
@@ -46,6 +49,7 @@ const authProgress = ref<AuthProgress>({ type: 'UNAUTHORIZED' })
         :post-template="postTemplate"
         :app-version="appVersion"
         :developer="AppConfig.developer"
+        :store-url="storeUrl"
         :auth-progress="authProgress"
         @signin="logEvent('signin', $event)"
         @signout="logEvent('signout', $event)"

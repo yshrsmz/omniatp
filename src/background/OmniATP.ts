@@ -3,7 +3,6 @@ import { Clock } from '../Clock'
 import { BskyRepository } from '../data/BskyRepository'
 import { Payload, SubCommand } from './SubCommands'
 import { XRPCError } from '@atproto/xrpc'
-import { LinkMeta } from '../data/model/LinkMeta'
 
 const extractError = (
   e: unknown
