@@ -7,6 +7,6 @@ Type 'at' + [space/tab] + ':share' + [space] + [type anything] to share url with
 Type 'at' + [space/tab] + ':options' to open options page.
 Type 'at' + [space/tab] + ':version' to check version.
 
-Once you install the extension, the options page is automatically opend, and you needd to sign in to Bluesky.
+Once you install the extension, the options page is automatically opend, and you needed to sign in to Bluesky.
 
 OmniATP is an open source software, you can access its code from https://github.com/yshrsmz/omniatp
