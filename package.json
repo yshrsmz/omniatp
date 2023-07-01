@@ -11,37 +11,37 @@
     "lint:fix": "eslint --fix --ext .ts,.js,.vue,.cjs . && prettier -w ."
   },
   "dependencies": {
-    "@atproto/api": "0.2.11",
+    "@atproto/api": "0.3.13",
     "@atproto/xrpc": "0.1.0",
-    "@headlessui/vue": "1.7.13",
-    "@heroicons/vue": "2.0.17",
-    "consola": "3.1.0",
-    "date-fns": "2.29.3",
+    "@headlessui/vue": "1.7.14",
+    "@heroicons/vue": "2.0.18",
+    "consola": "3.2.2",
+    "date-fns": "2.30.0",
     "vest": "4.6.11",
-    "vue": "3.2.47"
+    "vue": "3.3.4"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "2.0.0-beta.16",
+    "@crxjs/vite-plugin": "2.0.0-beta.18",
     "@histoire/plugin-vue": "0.16.1",
     "@tailwindcss/forms": "0.5.3",
-    "@types/chrome": "0.0.234",
-    "@typescript-eslint/eslint-plugin": "5.59.1",
-    "@typescript-eslint/parser": "5.59.1",
+    "@types/chrome": "0.0.239",
+    "@typescript-eslint/eslint-plugin": "5.60.1",
+    "@typescript-eslint/parser": "5.60.1",
     "@vitejs/plugin-vue": "4.2.1",
     "@vue/eslint-config-prettier": "7.1.0",
     "@vue/eslint-config-typescript": "11.0.3",
     "autoprefixer": "10.4.14",
-    "eslint": "8.39.0",
+    "eslint": "8.44.0",
     "eslint-config-prettier": "8.8.0",
-    "eslint-plugin-vue": "9.11.0",
-    "histoire": "0.16.1",
-    "postcss": "8.4.23",
-    "postcss-nesting": "11.2.2",
+    "eslint-plugin-vue": "9.15.1",
+    "histoire": "0.16.2",
+    "postcss": "8.4.24",
+    "postcss-nesting": "11.3.0",
     "tailwindcss": "3.3.2",
-    "typescript": "5.0.4",
+    "typescript": "5.1.6",
     "vite": "4.3.5",
-    "vitest": "0.30.1",
-    "vue-tsc": "1.6.1"
+    "vitest": "0.32.2",
+    "vue-tsc": "1.8.3"
   },
-  "packageManager": "pnpm@8.3.1"
+  "packageManager": "pnpm@8.6.5"
 }
