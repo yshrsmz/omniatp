@@ -30,7 +30,7 @@ jobs:
         run: pnpm build
 
       - name: Upload extension
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: omniatp-${{ github.ref_name }}
           path: ./dist
