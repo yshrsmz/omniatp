@@ -1,20 +1,19 @@
 {
-  "extends": ["config:base", ":pinDependencies", ":pinDevDependencies"],
-  "lockFileMaintenance": { "enabled": true },
-  "masterIssue": true,
+  "extends": ["config:recommended", ":pinDependencies", ":pinDevDependencies"],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "dependencyDashboard": true,
   "prConcurrentLimit": 1,
   "packageRules": [
     {
-      "matchPackagePatterns": ["*"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
-      "excludePackageNames": [
-      ]
+      "matchPackageNames": ["*"]
     },
     {
-      "matchPackagePrefixes": ["@vitejs"],
-      "matchPackageNames": ["vite"],
+      "matchPackageNames": ["vite", "@vitejs{/,}**"],
       "groupName": "vitejs"
     }
   ]
