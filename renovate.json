@@ -2,6 +2,7 @@
   "extends": ["config:base", ":pinDependencies", ":pinDevDependencies"],
   "lockFileMaintenance": { "enabled": true },
   "masterIssue": true,
+  "prConcurrentLimit": 1,
   "packageRules": [
     {
       "matchPackagePatterns": ["*"],
