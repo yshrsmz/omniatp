@@ -1,0 +1,59 @@
+{
+  "name": "Node.js",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "..",
+    "cacheFrom": "kover-report-action-devcontainer-cache:latest"
+  },
+  "workspaceFolder": "/home/vscode/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/home/vscode/workspace,type=bind,consistency=cached",
+  "mounts": [
+    {
+      "source": "gh-config-${localWorkspaceFolderBasename}",
+      "target": "/home/vscode/.config/gh",
+      "type": "volume"
+    },
+    {
+      "source": "claude-code-config-${localWorkspaceFolderBasename}",
+      "target": "/home/vscode/.claude",
+      "type": "volume"
+    },
+    {
+      "source": "claude-code-user-config-${localWorkspaceFolderBasename}",
+      "target": "/home/vscode/.config/claude",
+      "type": "volume"
+    },
+    {
+      "source": "codex-config-${localWorkspaceFolderBasename}",
+      "target": "/home/vscode/.codex",
+      "type": "volume"
+    }
+  ],
+  "runArgs": [
+    "--env-file",
+    "${localWorkspaceFolder}/.devcontainer/runtime.env"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "installDirectlyFromGitHubRelease": true,
+      "version": "latest"
+    }
+  },
+  "initializeCommand": [
+    "/bin/sh",
+    "-c",
+    "cd ${localWorkspaceFolder} && if [ ! -f .devcontainer/runtime.env ]; then cp .devcontainer/runtime.env.template .devcontainer/runtime.env; fi"
+  ],
+  "onCreateCommand": [
+    "/bin/bash",
+    "/home/vscode/workspace/.devcontainer/scripts/on-create.sh"
+  ],
+  "postCreateCommand": [
+    "/bin/bash",
+    "/home/vscode/workspace/.devcontainer/scripts/on-post-create.sh"
+  ],
+  "postStartCommand": [
+    "/bin/bash",
+    "/home/vscode/workspace/.devcontainer/scripts/on-post-start.sh"
+  ]
+}
