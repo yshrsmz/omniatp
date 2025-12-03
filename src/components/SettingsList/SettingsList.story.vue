@@ -7,7 +7,7 @@ import { logEvent } from 'histoire/client'
 import { ref } from 'vue'
 import { AuthProgress } from '../../data/model/AuthProgress'
 
-const profile: AppBskyActorDefs.ProfileView = {
+const profile: AppBskyActorDefs.ProfileViewDetailed = {
   avatar:
     'https://cdn.bsky.social/imgproxy/vuWLhEnVe5fsPWVjn3W7p8dbjc_pOJhrqmHGr8Iokig/rs:fill:1000:1000:1:0/plain/bafkreiatc54uycwuatcbjiz4q44yx2bpshe65w3wfdikum7j7twrxg5isu@jpeg',
   did: 'did:plc:64nvfmwx7tqzr7i7bq5woiby',

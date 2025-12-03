@@ -20,7 +20,7 @@ const storeUrl = component.chromeDelegate().storeUrl()
 
 const isAuthorized = ref<boolean>(false)
 
-const profile = ref<AppBskyActorDefs.ProfileView>()
+const profile = ref<AppBskyActorDefs.ProfileViewDetailed>()
 
 const authProgress = ref<AuthProgress>(AuthProgress.INITIALIZING())
 

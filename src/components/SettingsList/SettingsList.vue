@@ -13,7 +13,7 @@ import { computed } from 'vue'
 const props = defineProps<{
   isAuthorized: boolean
   service: string
-  profile?: AppBskyActorDefs.ProfileView
+  profile?: AppBskyActorDefs.ProfileViewDetailed
   postTemplate: PostTemplate
   appVersion: string
   developer: Developer
