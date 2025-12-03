@@ -7,10 +7,10 @@
   },
   "eslint.format.enable": true,
   "files.associations": {
-    "*.css": "tailwindcss",
+    "*.css": "tailwindcss"
   },
   "tailwindCSS.includeLanguages": {
     "vue": "html",
-    "vue-html": "html",
+    "vue-html": "html"
   }
 }

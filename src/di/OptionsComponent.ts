@@ -1,5 +1,3 @@
-import { OmniATP } from '../background/OmniATP'
-import { Options, Share, SubCommand, Version } from '../background/SubCommands'
 import { BskyRepository } from '../data/BskyRepository'
 import { PostTemplateRepository } from '../data/PostTemplateRepository'
 import { ChromeDelegate } from '../platform/ChromeDelegate'
