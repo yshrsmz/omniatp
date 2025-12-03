@@ -37,7 +37,7 @@ importers:
         specifier: 2.0.0-beta.18
         version: 2.0.0-beta.18
       '@eslint/js':
-        specifier: ^9.39.1
+        specifier: 9.39.1
         version: 9.39.1
       '@histoire/plugin-vue':
         specifier: 0.16.1
@@ -55,16 +55,16 @@ importers:
         specifier: 10.4.14
         version: 10.4.14(postcss@8.4.24)
       eslint:
-        specifier: ^9.39.1
+        specifier: 9.39.1
         version: 9.39.1(jiti@1.21.7)
       eslint-config-prettier:
-        specifier: ^10.1.8
+        specifier: 10.1.8
         version: 10.1.8(eslint@9.39.1(jiti@1.21.7))
       eslint-plugin-vue:
-        specifier: ^10.6.2
+        specifier: 10.6.2
         version: 10.6.2(@typescript-eslint/parser@8.48.1(eslint@9.39.1(jiti@1.21.7))(typescript@5.1.6))(eslint@9.39.1(jiti@1.21.7))(vue-eslint-parser@10.2.0(eslint@9.39.1(jiti@1.21.7)))
       globals:
-        specifier: ^16.5.0
+        specifier: 16.5.0
         version: 16.5.0
       histoire:
         specifier: 0.16.2
@@ -76,7 +76,7 @@ importers:
         specifier: 12.0.0
         version: 12.0.0(postcss@8.4.24)
       prettier:
-        specifier: ^3.7.4
+        specifier: 3.7.4
         version: 3.7.4
       tailwindcss:
         specifier: 3.3.2
@@ -85,7 +85,7 @@ importers:
         specifier: 5.1.6
         version: 5.1.6
       typescript-eslint:
-        specifier: ^8.48.1
+        specifier: 8.48.1
         version: 8.48.1(eslint@9.39.1(jiti@1.21.7))(typescript@5.1.6)
       vite:
         specifier: 4.5.14
@@ -94,7 +94,7 @@ importers:
         specifier: 0.32.2
         version: 0.32.2(jsdom@20.0.3)
       vue-eslint-parser:
-        specifier: ^10.2.0
+        specifier: 10.2.0
         version: 10.2.0(eslint@9.39.1(jiti@1.21.7))
       vue-tsc:
         specifier: 1.8.3
