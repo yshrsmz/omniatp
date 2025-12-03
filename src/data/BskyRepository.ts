@@ -1,10 +1,11 @@
 import {
   AtpSessionData,
   AtpSessionEvent,
-  BskyAgent,
+  AtpAgent,
   RichText,
   AppBskyActorDefs,
   AppBskyEmbedExternal,
+  $Typed,
 } from '@atproto/api'
 import { LoginCredential } from './model/LoginCredential'
 import { ConfigLocalGateway } from './ConfigLocalGateway'
@@ -21,19 +22,19 @@ export interface BskyRepository {
     listner: (newValue?: AtpSessionData, oldValue?: AtpSessionData) => void
   ): void
 
-  getProfile(): Promise<AppBskyActorDefs.ProfileView | undefined>
+  getProfile(): Promise<AppBskyActorDefs.ProfileViewDetailed | undefined>
 
   createRichText(text: string): Promise<RichText>
   createPost(text: string, meta?: LinkMeta): Promise<void>
 }
 
 export class DefaultBskyRepository implements BskyRepository {
-  readonly agent: BskyAgent
+  readonly agent: AtpAgent
   readonly localGateway: ConfigLocalGateway
 
   constructor(localGateway: ConfigLocalGateway) {
     this.localGateway = localGateway
-    this.agent = new BskyAgent({
+    this.agent = new AtpAgent({
       service: 'https://bsky.social',
       persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
         console.log('persistSession', event, session)
@@ -90,12 +91,16 @@ export class DefaultBskyRepository implements BskyRepository {
     // credential should already be saved via persistSession callback,
     // but should be saved here as well so that subsequent call can safely access bsky API
     if (res.success && res.data) {
-      await this.saveSessionIfNeeded(res.data)
+      const sessionData: AtpSessionData = {
+        ...res.data,
+        active: res.data.active ?? true,
+      }
+      await this.saveSessionIfNeeded(sessionData)
     }
   }
 
   async signOut(): Promise<void> {
-    this.agent.session = undefined
+    await this.agent.logout()
     await this.localGateway.clearSession()
   }
 
@@ -124,7 +129,9 @@ export class DefaultBskyRepository implements BskyRepository {
     this.localGateway.onSessionUpdate(listner)
   }
 
-  async getProfile(): Promise<AppBskyActorDefs.ProfileView | undefined> {
+  async getProfile(): Promise<
+    AppBskyActorDefs.ProfileViewDetailed | undefined
+  > {
     const session = await this.localGateway.getSession()
     console.log('getProfile', session)
     if (session) {
@@ -146,13 +153,13 @@ export class DefaultBskyRepository implements BskyRepository {
   async createPost(text: string, meta: LinkMeta): Promise<void> {
     const result = await this.createRichText(text, true)
 
-    let embed: AppBskyEmbedExternal.Main | undefined = undefined
+    let embed: $Typed<AppBskyEmbedExternal.Main> | undefined = undefined
     if (meta) {
       embed = {
+        $type: 'app.bsky.embed.external',
         external: {
           ...meta,
         },
-        $type: 'app.bsky.embed.external',
       }
     }
 

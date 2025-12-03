@@ -9,7 +9,7 @@ import { LoginCredential } from '../../data/model/LoginCredential'
 
 const props = defineProps<{
   service: string
-  profile?: AppBskyActorDefs.ProfileView
+  profile?: AppBskyActorDefs.ProfileViewDetailed
   progress: AuthProgress
 }>()
 
