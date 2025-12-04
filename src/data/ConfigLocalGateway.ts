@@ -55,7 +55,10 @@ export class DefaultConfigLocalGateway implements ConfigLocalGateway {
     this.storage.onChanged((changes) => {
       const { session } = changes
       if (session) {
-        listener(session.newValue, session.oldValue)
+        listener(
+          session.newValue as AtpSessionData | undefined,
+          session.oldValue as AtpSessionData | undefined
+        )
       }
     })
   }
