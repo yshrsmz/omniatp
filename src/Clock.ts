@@ -1,4 +1,4 @@
-import getUnixTime from 'date-fns/getUnixTime'
+import { getUnixTime } from 'date-fns'
 
 export interface Clock {
   currentTimeSeconds(): number
