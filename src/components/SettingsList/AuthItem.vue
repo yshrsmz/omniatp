@@ -75,7 +75,7 @@ const handleSignOut = () => {
       <div v-if="progress.type !== 'INITIALIZING'">
         <button
           v-if="progress.type === 'AUTHORIZED'"
-          :class="[$style.AuthButton, $style.__signout]"
+          class="inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 bg-red-600 hover:bg-red-700 focus:ring-red-500"
           type="button"
           @click="handleSignOutClick"
         >
@@ -83,7 +83,7 @@ const handleSignOut = () => {
         </button>
         <button
           v-else
-          :class="[$style.AuthButton, $style.__signin]"
+          class="inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500"
           type="button"
           @click="handleSignInClick"
         >
@@ -105,17 +105,3 @@ const handleSignOut = () => {
     />
   </SettingsListItem>
 </template>
-
-<style lang="postcss" module>
-.AuthButton {
-  @apply inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2;
-
-  &.__signin {
-    @apply bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500;
-  }
-
-  &.__signout {
-    @apply bg-red-600 hover:bg-red-700 focus:ring-red-500;
-  }
-}
-</style>
