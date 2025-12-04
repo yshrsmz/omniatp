@@ -27,8 +27,8 @@ importers:
         specifier: 2.30.0
         version: 2.30.0
       vest:
-        specifier: 4.6.11
-        version: 4.6.11
+        specifier: 5.4.6
+        version: 5.4.6
       vue:
         specifier: 3.5.25
         version: 3.5.25(typescript@5.9.3)
@@ -1737,8 +1737,8 @@ packages:
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
 
-  n4s@4.3.7:
-    resolution: {integrity: sha512-uzm6CL9cBMHaB/YuGBHRDRa6RuvpZ/xXgyoWgVS/+8/E0zQC3IyZVnIOPCOavCs/UOm4zomn99T4ng9HWcL7Cw==}
+  n4s@5.0.28:
+    resolution: {integrity: sha512-64ap7Qn8Oyua2ImIZH6/pkql89qyiTZ4jJqpS2g863++0tgbM4cuv3KJvZqMpa8kY2ovZ4q3cD0/KU4SImjg5g==}
 
   nanoid@3.3.11:
     resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
@@ -2223,14 +2223,14 @@ packages:
   vast@1.0.42:
     resolution: {integrity: sha512-YP3zNDRVZZRuHgUJ5xD7HAF0AFius2KWqIYSAuzA6E4ftPkL+gSQrp9agPM1HgsHS9L7XWoegYxsH81kawztuQ==}
 
-  vest-utils@0.1.1:
-    resolution: {integrity: sha512-dsH4zt4IsBvDY3BhUo6mNgwN9WVIfUP8jwBp2XEZQAq7XYAuVQnGTCrdF8+/OtoP141jCxMppXYpO4xbMWYwhA==}
-
   vest-utils@1.3.3:
     resolution: {integrity: sha512-9y+26YXjOpv89QmEXlFrTFLUMwUjAuwpimUVgb8HS3eNuBR3HEY68o4U/sPyGTh3OEvS7N502pX82WDm1zvsaA==}
 
-  vest@4.6.11:
-    resolution: {integrity: sha512-2C2PfDselDX5cgaxZmp4v1IaAhnGzlSkuQSSYIsOac3TW1+N6QFHoUx2n5qkLpe0thJLZjEWT4fM4anQSSjP2Q==}
+  vest@5.4.6:
+    resolution: {integrity: sha512-Q3KQYluxdjnz5/HmR8coHNlXbJPLWMfrwz4wlcqMX4SaJ8qcmy5Ix9NTiQt3hTMrETdj+q+513J/kt+ahdJlLg==}
+
+  vestjs-runtime@1.5.1:
+    resolution: {integrity: sha512-kiXuNJBS/6ZkzMArLuiEBtXe/cMr/8NE4lp6flpLuEzVwXM2nli9UfvQ26lmuvU1/ggPgjJNv/FpSnWofvHYcA==}
 
   vite-node@0.34.7:
     resolution: {integrity: sha512-0Yzb96QzHmqIKIs/x2q/sqG750V/EF6yDkS2p1WjJc1W2bgRSuQjf5vB9HY8h2nVb5j4pO5paS5Npcv3s69YUg==}
@@ -4182,10 +4182,10 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
-  n4s@4.3.7:
+  n4s@5.0.28:
     dependencies:
       context: 3.0.33
-      vest-utils: 0.1.1
+      vest-utils: 1.3.3
 
   nanoid@3.3.11: {}
 
@@ -4654,16 +4654,20 @@ snapshots:
     dependencies:
       vest-utils: 1.3.3
 
-  vest-utils@0.1.1: {}
-
   vest-utils@1.3.3: {}
 
-  vest@4.6.11:
+  vest@5.4.6:
     dependencies:
       context: 3.0.33
-      n4s: 4.3.7
+      n4s: 5.0.28
       vast: 1.0.42
-      vest-utils: 0.1.1
+      vest-utils: 1.3.3
+      vestjs-runtime: 1.5.1
+
+  vestjs-runtime@1.5.1:
+    dependencies:
+      context: 3.0.33
+      vest-utils: 1.3.3
 
   vite-node@0.34.7(@types/node@24.10.1):
     dependencies:
