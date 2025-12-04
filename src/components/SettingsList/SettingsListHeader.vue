@@ -7,13 +7,7 @@ const COMPONENT_NAME = 'SettingsListHeader'
 </script>
 
 <template>
-  <SettingsListItem :class="[COMPONENT_NAME, $style.module]">
-    <p>{{ title }}</p></SettingsListItem
-  >
+  <SettingsListItem :class="COMPONENT_NAME" inner-class="!pb-2">
+    <p class="text-gray-400 font-semibold">{{ title }}</p>
+  </SettingsListItem>
 </template>
-
-<style lang="postcss" module>
-.module > * {
-  @apply pb-2 text-gray-400 font-semibold;
-}
-</style>
