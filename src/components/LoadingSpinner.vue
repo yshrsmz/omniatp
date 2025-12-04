@@ -4,7 +4,7 @@
   <span class="LoadingSpinner" :class="$style.module"></span>
 </template>
 
-<style lang="postcss" module>
+<style module>
 .module {
   width: 48px;
   height: 48px;
