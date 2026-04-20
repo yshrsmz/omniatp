@@ -1,5 +1,6 @@
 {
   "extends": ["config:recommended", ":pinDependencies", ":pinDevDependencies"],
+  "reviewers": ["yshrsmz"],
   "lockFileMaintenance": {
     "enabled": true
   },
