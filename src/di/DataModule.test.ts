@@ -6,13 +6,6 @@ import { DefaultBskyRepository } from '../data/BskyRepository'
 import { noopLogger } from '../Logger'
 
 describe('DefaultDataModule', () => {
-  it('memoizes the AtpAgent factory between calls', () => {
-    const module = new DefaultDataModule(noopLogger)
-    const factoryA = module.atpAgentFactory()
-    const factoryB = module.atpAgentFactory()
-    expect(factoryA).toBe(factoryB)
-  })
-
   it('builds an AtpAgent with the provided options when invoked', () => {
     const module = new DefaultDataModule(noopLogger)
     const agent = module.atpAgentFactory()({

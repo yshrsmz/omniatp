@@ -21,6 +21,9 @@ import {
 } from '../data/AppPreferencesRepository'
 import { Logger } from '../Logger'
 
+const defaultAtpAgentFactory: AtpAgentFactory = (options) =>
+  new AtpAgent(options)
+
 export interface DataModule {
   clock(): Clock
   atpAgentFactory(): AtpAgentFactory
@@ -34,7 +37,6 @@ export interface DataModule {
 
 export class DefaultDataModule implements DataModule {
   private _clock?: Clock
-  private _atpAgentFactory?: AtpAgentFactory
   private _configLocalGateway?: ConfigLocalGateway
   private _bskyRepository?: BskyRepository
   private _postTemplateRepository?: PostTemplateRepository
@@ -51,11 +53,7 @@ export class DefaultDataModule implements DataModule {
   }
 
   atpAgentFactory(): AtpAgentFactory {
-    return getOrCreate(
-      this._atpAgentFactory,
-      () => (options) => new AtpAgent(options),
-      (v) => (this._atpAgentFactory = v)
-    )
+    return defaultAtpAgentFactory
   }
 
   configLocalGateway(storage: ChromeStorageDelegate): ConfigLocalGateway {
