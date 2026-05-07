@@ -11,6 +11,10 @@ import {
   DefaultPostTemplateRepository,
   PostTemplateRepository,
 } from '../data/PostTemplateRepository'
+import {
+  AppPreferencesRepository,
+  DefaultAppPreferencesRepository,
+} from '../data/AppPreferencesRepository'
 
 export interface DataModule {
   clock(): Clock
@@ -18,6 +22,9 @@ export interface DataModule {
   configLocalGateway(storage: ChromeStorageDelegate): ConfigLocalGateway
   bskyRepository(storage: ChromeStorageDelegate): BskyRepository
   postTemplateRepository(storage: ChromeStorageDelegate): PostTemplateRepository
+  appPreferencesRepository(
+    storage: ChromeStorageDelegate
+  ): AppPreferencesRepository
 }
 
 export class DefaultDataModule implements DataModule {
@@ -26,6 +33,7 @@ export class DefaultDataModule implements DataModule {
   private _configLocalGateway?: ConfigLocalGateway
   private _bskyRepository?: BskyRepository
   private _postTemplateRepository?: PostTemplateRepository
+  private _appPreferencesRepository?: AppPreferencesRepository
 
   clock(): Clock {
     return getOrCreate(
@@ -80,6 +88,17 @@ export class DefaultDataModule implements DataModule {
       this._postTemplateRepository,
       () => new DefaultPostTemplateRepository(this.configLocalGateway(storage)),
       (v) => (this._postTemplateRepository = v)
+    )
+  }
+
+  appPreferencesRepository(
+    storage: ChromeStorageDelegate
+  ): AppPreferencesRepository {
+    return getOrCreate(
+      this._appPreferencesRepository,
+      () =>
+        new DefaultAppPreferencesRepository(this.configLocalGateway(storage)),
+      (v) => (this._appPreferencesRepository = v)
     )
   }
 }

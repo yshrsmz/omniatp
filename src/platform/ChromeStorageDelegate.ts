@@ -3,7 +3,7 @@ type ChromeStorage =
   | typeof chrome.storage.session
   | typeof chrome.storage.sync
 
-type StorageValueType = string | number | object | null
+type StorageValueType = string | number | boolean | object | null
 
 type StorageChangeEvent = chrome.storage.StorageChange
 

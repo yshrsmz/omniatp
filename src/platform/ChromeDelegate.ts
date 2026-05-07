@@ -1,3 +1,8 @@
+import {
+  OFFSCREEN_CLIPBOARD_TARGET,
+  OffscreenClipboardMessage,
+  OffscreenClipboardResponse,
+} from './offscreen-messages'
 import { Chrome, escapeText } from '../utils'
 
 export interface ChromeDelegate {
@@ -8,6 +13,7 @@ export interface ChromeDelegate {
   openNewTab(url: string, active: boolean): void
   openOptionsPage(): void
   createNotification(iconUrl: string, title: string, message: string): void
+  copyToClipboard(text: string): Promise<void>
   storeUrl(): string
   onStorageChanged(
     listener: (changes: { [key: string]: chrome.storage.StorageChange }) => void
@@ -68,6 +74,40 @@ export class DefaultChromeDelegate implements ChromeDelegate {
         }, 3000)
       }
     )
+  }
+
+  async copyToClipboard(text: string): Promise<void> {
+    await this.ensureOffscreenDocument()
+
+    const message: OffscreenClipboardMessage = {
+      target: OFFSCREEN_CLIPBOARD_TARGET,
+      type: 'copy',
+      text,
+    }
+    const response = (await this.chrome.runtime.sendMessage(message)) as
+      | OffscreenClipboardResponse
+      | undefined
+
+    if (!response?.ok) {
+      throw new Error(response?.error ?? 'Clipboard copy failed')
+    }
+  }
+
+  private async ensureOffscreenDocument(): Promise<void> {
+    const offscreen = this.chrome.offscreen
+    if (!offscreen) {
+      throw new Error('chrome.offscreen API is not available')
+    }
+
+    if (await offscreen.hasDocument()) {
+      return
+    }
+
+    await offscreen.createDocument({
+      url: this.chrome.runtime.getURL('offscreen.html'),
+      reasons: [offscreen.Reason.CLIPBOARD],
+      justification: 'Write a posted Bluesky message to the clipboard.',
+    })
   }
 
   storeUrl(): string {

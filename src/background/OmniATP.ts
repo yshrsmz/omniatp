@@ -1,6 +1,7 @@
 import { ChromeDelegate } from '../platform/ChromeDelegate'
 import { Clock } from '../Clock'
 import { BskyRepository } from '../data/BskyRepository'
+import { AppPreferencesRepository } from '../data/AppPreferencesRepository'
 import { Payload, SubCommand } from './SubCommands'
 import { XRPCError } from '@atproto/xrpc'
 
@@ -20,6 +21,7 @@ export class OmniATP {
     readonly clock: Clock,
     readonly chrome: ChromeDelegate,
     readonly bskyRepository: BskyRepository,
+    readonly appPreferencesRepository: AppPreferencesRepository,
     readonly subCommands: SubCommand[]
   ) {}
 
@@ -58,6 +60,14 @@ export class OmniATP {
         this.chrome.appName(),
         payload.message
       )
+
+      if (await this.appPreferencesRepository.shouldCopyToClipboardOnPost()) {
+        try {
+          await this.chrome.copyToClipboard(payload.message)
+        } catch (clipboardError) {
+          console.error('Failed to copy to clipboard', clipboardError)
+        }
+      }
     } catch (e) {
       const { status, error } = extractError(e)
       this.chrome.createNotification(
