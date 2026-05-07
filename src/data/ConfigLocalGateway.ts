@@ -6,6 +6,9 @@ export interface ConfigLocalGateway {
   savePostPrefix(prefix: string): Promise<void>
   clearPostPrefix(): Promise<void>
 
+  getCopyToClipboardOnPost(): Promise<boolean>
+  saveCopyToClipboardOnPost(value: boolean): Promise<void>
+
   saveSession(session: AtpSessionData): Promise<void>
   getSession(): Promise<AtpSessionData | undefined>
   clearSession(): Promise<void>
@@ -30,6 +33,17 @@ export class DefaultConfigLocalGateway implements ConfigLocalGateway {
 
   async clearPostPrefix(): Promise<void> {
     await this.storage.remove(['postPrefix'])
+  }
+
+  async getCopyToClipboardOnPost(): Promise<boolean> {
+    const { copyToClipboardOnPost } = await this.storage.get({
+      copyToClipboardOnPost: false,
+    })
+    return copyToClipboardOnPost
+  }
+
+  async saveCopyToClipboardOnPost(value: boolean): Promise<void> {
+    await this.storage.save({ copyToClipboardOnPost: value })
   }
 
   async saveSession(session: AtpSessionData): Promise<void> {

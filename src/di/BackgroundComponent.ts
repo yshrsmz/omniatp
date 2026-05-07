@@ -41,6 +41,9 @@ export class DefaultBackgroundComponent implements BackgroundComponent {
           this.dataModule.clock(),
           this.platformModule.chromeDelegate(),
           this.dataModule.bskyRepository(this.platformModule.storageDelegate()),
+          this.dataModule.appPreferencesRepository(
+            this.platformModule.storageDelegate()
+          ),
           this.subCommands()
         ),
       (v) => (this._omniatp = v)

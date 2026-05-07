@@ -12,6 +12,7 @@ import { LoginCredential } from './data/model/LoginCredential'
 const component = createOptionsComponent(chrome)
 
 const _postTemplate = ref<PostTemplate>(PostTemplate.empty())
+const _copyToClipboardOnPost = ref<boolean>(false)
 
 const service = BskyConfig.service
 const appVersion = component.chromeDelegate().appVersion()
@@ -29,6 +30,14 @@ const postTemplate = computed<PostTemplate>({
   set: (value) => {
     _postTemplate.value = value
     component.postTemplateRepository().save(value)
+  },
+})
+
+const copyToClipboardOnPost = computed<boolean>({
+  get: () => _copyToClipboardOnPost.value,
+  set: (value) => {
+    _copyToClipboardOnPost.value = value
+    component.appPreferencesRepository().setCopyToClipboardOnPost(value)
   },
 })
 
@@ -57,15 +66,19 @@ onMounted(async () => {
   const repo = component.bskyRepository()
   await repo.resumeSession()
 
-  const p = await repo.getProfile()
+  const [p, template, copyOnPost] = await Promise.all([
+    repo.getProfile(),
+    component.postTemplateRepository().get(),
+    component.appPreferencesRepository().getCopyToClipboardOnPost(),
+  ])
+
   console.log('profile', p)
   profile.value = p
-
   authProgress.value = p
     ? AuthProgress.AUTHORIZED()
     : AuthProgress.UNAUTHORIZED()
-
-  _postTemplate.value = await component.postTemplateRepository().get()
+  _postTemplate.value = template
+  _copyToClipboardOnPost.value = copyOnPost
 })
 </script>
 
@@ -77,6 +90,7 @@ onMounted(async () => {
     <main class="max-w-4xl w-full flex-grow">
       <SettingsList
         v-model:post-template="postTemplate"
+        v-model:copy-to-clipboard-on-post="copyToClipboardOnPost"
         v-model:auth-progress="authProgress"
         class="w-full"
         :service="service"

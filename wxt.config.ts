@@ -28,7 +28,13 @@ export default defineConfig({
       omnibox: {
         keyword: isDev ? 'atd' : 'at',
       },
-      permissions: ['tabs', 'notifications', 'storage'],
+      permissions: [
+        'tabs',
+        'notifications',
+        'storage',
+        'offscreen',
+        'clipboardWrite',
+      ],
       host_permissions: [],
       content_security_policy: {
         extension_pages: "script-src 'self'; object-src 'self';",

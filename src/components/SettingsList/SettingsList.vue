@@ -2,6 +2,7 @@
 import { PostTemplate } from '../../data/model/PostTemplate'
 import AuthItem from './AuthItem.vue'
 import PostPrefixItem from './PostPrefixItem.vue'
+import CopyToClipboardItem from './CopyToClipboardItem.vue'
 import SettingsListHeader from './SettingsListHeader.vue'
 import { AppBskyActorDefs } from '@atproto/api'
 import SettingsListItem from './SettingsListItem.vue'
@@ -15,6 +16,7 @@ const props = defineProps<{
   service: string
   profile?: AppBskyActorDefs.ProfileViewDetailed
   postTemplate: PostTemplate
+  copyToClipboardOnPost: boolean
   appVersion: string
   developer: Developer
   storeUrl: string
@@ -25,6 +27,7 @@ const emit = defineEmits<{
   (event: 'signin', value: LoginCredential): void
   (event: 'signout'): void
   (event: 'update:postTemplate', value: PostTemplate): void
+  (event: 'update:copyToClipboardOnPost', value: boolean): void
   (event: 'update:authProgress', value: AuthProgress): void
 }>()
 
@@ -36,6 +39,10 @@ const authProgress = computed({
 const handleUpdatePrefix = (prefix: string) => {
   const newTemplate = new PostTemplate(prefix)
   emit('update:postTemplate', newTemplate)
+}
+
+const handleUpdateCopyToClipboard = (value: boolean) => {
+  emit('update:copyToClipboardOnPost', value)
 }
 </script>
 
@@ -55,6 +62,10 @@ const handleUpdatePrefix = (prefix: string) => {
       <PostPrefixItem
         :prefix="postTemplate.prefix"
         @update:prefix="handleUpdatePrefix"
+      />
+      <CopyToClipboardItem
+        :enabled="copyToClipboardOnPost"
+        @update:enabled="handleUpdateCopyToClipboard"
       />
       <SettingsListHeader title="Others" />
       <SettingsListItem class="!border-t-0">
