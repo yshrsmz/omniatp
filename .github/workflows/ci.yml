@@ -6,6 +6,10 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   ci:
     runs-on: ${{ matrix.os }}
@@ -44,8 +48,12 @@ jobs:
           eslint_flags: '.'
           level: error
 
-      # - name: Test
-      #   run: pnpm test
+      - name: Test 🧪
+        run: pnpm test:coverage
+
+      - name: Coverage report 📊
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@3c50566c523e04813df28de8f7c48dd97d663f1c # v2.11.2
 
       - name: Build
         run: pnpm build

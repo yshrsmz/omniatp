@@ -26,6 +26,20 @@ export default tseslint.config(
     },
   },
   {
+    files: ['vitest.config.ts', 'wxt.config.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ['src/test/headlessui-stubs.ts'],
+    rules: {
+      'vue/one-component-per-file': 'off',
+    },
+  },
+  {
     rules: {
       'vue/no-v-model-argument': 'off',
       '@typescript-eslint/comma-dangle': ['error', 'only-multiline'],

@@ -1,0 +1,93 @@
+# Dependency injection
+
+OmniATP uses a **manual** DI pattern under `src/di/`. There is no DI container
+library — wiring is plain TypeScript code. Two component graphs exist:
+
+- `BackgroundComponent` — built for the service worker (`background.ts`).
+- `OptionsComponent` — built for the options page Vue app (`App.vue`).
+
+Both graphs share two modules:
+
+- `DataModule` — clock, storage gateway, repositories, and the `AtpAgent`
+  factory.
+- `PlatformModule` — Chrome platform delegates (`ChromeDelegate`,
+  `ChromeStorageDelegate`).
+
+`createBackgroundComponent(chrome)` and `createOptionsComponent(chrome)` in
+`src/di/factory.ts` are the only public entry points. Consumers (entrypoints,
+Vue setup blocks) call these once and ask the resulting component for the
+collaborator they need.
+
+## Layering
+
+`Gateway → Repository → consumer` (see `CLAUDE.md`):
+
+- `ConfigLocalGateway` is the only thing that talks to `ChromeStorageDelegate`
+  directly.
+- Repositories (`BskyRepository`, `PostTemplateRepository`,
+  `AppPreferencesRepository`) wrap the gateway and expose a domain API.
+- `OmniATP` and Vue components only ever talk to repositories — never to the
+  gateway.
+
+A repository may currently be a thin pass-through to the gateway. That is the
+_purpose_ of the layer, not a smell — keep it.
+
+## Memoization (`getOrCreate`)
+
+`src/di/helper.ts` defines `getOrCreate(value, creator, updater)`. Every
+collaborator the modules expose is memoized through this helper so the graph
+behaves like a singleton container. Implementations should always go through
+`getOrCreate` — never instantiate inline.
+
+## Adding a new dependency
+
+1. **Define an interface** next to the implementation. Do not let consumers
+   import the `Default…` class directly (the only exception is when a
+   consumer needs to expose the concrete type for testing, e.g.
+   `(repo as DefaultBskyRepository).agent` in DataModule tests).
+2. **Add a method to the relevant module** (`DataModule` or `PlatformModule`).
+   Memoize via `getOrCreate`.
+3. **Expose it through the component** (`BackgroundComponent` /
+   `OptionsComponent`) only if the entrypoint or Vue layer needs it directly.
+4. **Inject anything non-trivial** as a constructor argument. Don't reach for
+   globals (`chrome`, `Date`, `console.log`-driven flags) inside business
+   logic.
+
+## Factories vs. instances
+
+When a collaborator wraps a stateful third-party object (e.g. `AtpAgent`),
+inject a **factory** rather than a fresh instance:
+
+```ts
+export type AtpAgentFactory = (options: AtpAgentOptions) => AtpAgent
+
+export class DefaultBskyRepository {
+  constructor(
+    localGateway: ConfigLocalGateway,
+    agentFactory: AtpAgentFactory
+  ) {
+    this.agent = agentFactory({
+      service: BskyConfig.service,
+      persistSession: …,
+    })
+  }
+}
+```
+
+The factory lives on `DataModule` (`atpAgentFactory()`). `DefaultDataModule`
+provides the real one (`new AtpAgent(options)`); tests pass a factory that
+returns a hand-rolled fake recording calls. This avoids `vi.mock` on the
+`@atproto/api` module and keeps the type contract honest.
+
+## Testing implications
+
+- **Construct collaborators directly in tests**, passing fakes/stubs as
+  constructor arguments. Don't go through `DefaultDataModule` unless you are
+  specifically testing the wiring (see `src/di/DataModule.test.ts`).
+- For storage-backed code, use `InMemoryStorageDelegate` from `src/test/`
+  rather than mocking `chrome.storage.local`.
+- For chrome-API-backed code, use `createFakeChromeDelegate` from
+  `src/test/`.
+- Singletons / module-level state (e.g. the `default new DefaultClock()`
+  export in `src/Clock.ts`) should be avoided in new code; inject a `Clock`
+  through the module instead.

@@ -4,9 +4,13 @@ import {
   ConfigLocalGateway,
   DefaultConfigLocalGateway,
 } from '../data/ConfigLocalGateway'
-import { BskyRepository, DefaultBskyRepository } from '../data/BskyRepository'
+import {
+  AtpAgentFactory,
+  BskyRepository,
+  DefaultBskyRepository,
+} from '../data/BskyRepository'
 import { getOrCreate } from './helper'
-import { AtpSessionData, AtpSessionEvent, BskyAgent } from '@atproto/api'
+import { AtpAgent } from '@atproto/api'
 import {
   DefaultPostTemplateRepository,
   PostTemplateRepository,
@@ -18,7 +22,7 @@ import {
 
 export interface DataModule {
   clock(): Clock
-  bskyAgent(storage: ChromeStorageDelegate): BskyAgent
+  atpAgentFactory(): AtpAgentFactory
   configLocalGateway(storage: ChromeStorageDelegate): ConfigLocalGateway
   bskyRepository(storage: ChromeStorageDelegate): BskyRepository
   postTemplateRepository(storage: ChromeStorageDelegate): PostTemplateRepository
@@ -29,7 +33,7 @@ export interface DataModule {
 
 export class DefaultDataModule implements DataModule {
   private _clock?: Clock
-  private _bskAgent?: BskyAgent
+  private _atpAgentFactory?: AtpAgentFactory
   private _configLocalGateway?: ConfigLocalGateway
   private _bskyRepository?: BskyRepository
   private _postTemplateRepository?: PostTemplateRepository
@@ -43,25 +47,11 @@ export class DefaultDataModule implements DataModule {
     )
   }
 
-  // TODO: find a way to reset BskyAgent so that we can swap service
-  // maybe create a wrapper?
-  bskyAgent(storage: ChromeStorageDelegate): BskyAgent {
+  atpAgentFactory(): AtpAgentFactory {
     return getOrCreate(
-      this._bskAgent,
-      () =>
-        new BskyAgent({
-          service: 'https://bsky.social',
-          persistSession: (
-            event: AtpSessionEvent,
-            session?: AtpSessionData
-          ) => {
-            console.log('persistSession', event, session)
-            if (session) {
-              this.configLocalGateway(storage).saveSession(session)
-            }
-          },
-        }),
-      (v) => (this._bskAgent = v)
+      this._atpAgentFactory,
+      () => (options) => new AtpAgent(options),
+      (v) => (this._atpAgentFactory = v)
     )
   }
 
@@ -76,7 +66,11 @@ export class DefaultDataModule implements DataModule {
   bskyRepository(storage: ChromeStorageDelegate): BskyRepository {
     return getOrCreate(
       this._bskyRepository,
-      () => new DefaultBskyRepository(this.configLocalGateway(storage)),
+      () =>
+        new DefaultBskyRepository(
+          this.configLocalGateway(storage),
+          this.atpAgentFactory()
+        ),
       (v) => (this._bskyRepository = v)
     )
   }

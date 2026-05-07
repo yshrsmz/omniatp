@@ -29,3 +29,5 @@ dist.zip
 omniatp-*.zip
 
 .pnpm-store/
+
+coverage/

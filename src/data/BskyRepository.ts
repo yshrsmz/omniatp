@@ -2,6 +2,7 @@ import {
   AtpSessionData,
   AtpSessionEvent,
   AtpAgent,
+  AtpAgentOptions,
   RichText,
   AppBskyActorDefs,
   AppBskyEmbedExternal,
@@ -10,6 +11,7 @@ import {
 import { LoginCredential } from './model/LoginCredential'
 import { ConfigLocalGateway } from './ConfigLocalGateway'
 import { LinkMeta } from './model/LinkMeta'
+import { BskyConfig } from '../Configs'
 
 export interface BskyRepository {
   signIn(credential: LoginCredential): Promise<void>
@@ -28,16 +30,17 @@ export interface BskyRepository {
   createPost(text: string, meta?: LinkMeta): Promise<void>
 }
 
+export type AtpAgentFactory = (options: AtpAgentOptions) => AtpAgent
+
 export class DefaultBskyRepository implements BskyRepository {
   readonly agent: AtpAgent
   readonly localGateway: ConfigLocalGateway
 
-  constructor(localGateway: ConfigLocalGateway) {
+  constructor(localGateway: ConfigLocalGateway, agentFactory: AtpAgentFactory) {
     this.localGateway = localGateway
-    this.agent = new AtpAgent({
-      service: 'https://bsky.social',
+    this.agent = agentFactory({
+      service: BskyConfig.service,
       persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
-        console.log('persistSession', event, session)
         if (session && event !== 'create') {
           this.saveSessionIfNeeded(session)
           return
@@ -64,18 +67,14 @@ export class DefaultBskyRepository implements BskyRepository {
 
     let shouldSave
     if (session && current) {
-      // new session exists, and saved session exists
       const entries = Object.entries(session) as Array<
         [keyof AtpSessionData, AtpSessionData[keyof AtpSessionData]]
       >
-      // some fields are different
       shouldSave = entries.some(([key, value]) => current[key] !== value)
     } else {
-      // either or both sessions are undefined
       shouldSave = !!session
     }
 
-    console.log('saveSessionIfNeeded: ', shouldSave, session)
     if (shouldSave && session) {
       await this.localGateway.saveSession(session)
     }
@@ -87,7 +86,6 @@ export class DefaultBskyRepository implements BskyRepository {
       password: credential.password,
     })
 
-    console.log('login', res)
     // credential should already be saved via persistSession callback,
     // but should be saved here as well so that subsequent call can safely access bsky API
     if (res.success && res.data) {
@@ -107,8 +105,7 @@ export class DefaultBskyRepository implements BskyRepository {
   async resumeSession(): Promise<void> {
     const session = await this.localGateway.getSession()
     if (session) {
-      const res = await this.agent.resumeSession(session)
-      console.log('resumeSession', res)
+      await this.agent.resumeSession(session)
     }
   }
 
@@ -133,7 +130,6 @@ export class DefaultBskyRepository implements BskyRepository {
     AppBskyActorDefs.ProfileViewDetailed | undefined
   > {
     const session = await this.localGateway.getSession()
-    console.log('getProfile', session)
     if (session) {
       const res = await this.agent.getProfile({ actor: session.did })
       return res.data
@@ -150,7 +146,7 @@ export class DefaultBskyRepository implements BskyRepository {
     return result
   }
 
-  async createPost(text: string, meta: LinkMeta): Promise<void> {
+  async createPost(text: string, meta?: LinkMeta): Promise<void> {
     const result = await this.createRichText(text, true)
 
     let embed: $Typed<AppBskyEmbedExternal.Main> | undefined = undefined

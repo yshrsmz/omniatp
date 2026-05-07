@@ -5,9 +5,7 @@ export interface AppPreferencesRepository {
   setCopyToClipboardOnPost(value: boolean): Promise<void>
 }
 
-export class DefaultAppPreferencesRepository
-  implements AppPreferencesRepository
-{
+export class DefaultAppPreferencesRepository implements AppPreferencesRepository {
   constructor(readonly localGateway: ConfigLocalGateway) {}
 
   shouldCopyToClipboardOnPost(): Promise<boolean> {
