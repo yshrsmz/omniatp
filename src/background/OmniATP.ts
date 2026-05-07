@@ -54,14 +54,14 @@ export class OmniATP {
       await this.bskyRepository.createPost(payload.message, payload.meta)
 
       this.chrome.createNotification(
-        './src/assets/icon_128.png',
+        'icon/128.png',
         this.chrome.appName(),
         payload.message
       )
     } catch (e) {
       const { status, error } = extractError(e)
       this.chrome.createNotification(
-        './src/assets/icon_128.png',
+        'icon/128.png',
         `Oops! there was an error: ${status}`,
         error ?? 'Unknown error'
       )
