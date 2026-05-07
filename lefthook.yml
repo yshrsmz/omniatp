@@ -1,0 +1,19 @@
+# Mirrors the checks in .github/workflows/ci.yml so they run locally before
+# code reaches CI. See https://lefthook.dev/configuration/.
+pre-commit:
+  parallel: true
+  commands:
+    prettier:
+      glob: '*.{js,mjs,cjs,ts,mts,cts,vue,json,md,yml,yaml,html,css,scss}'
+      run: pnpm exec prettier --check {staged_files}
+    eslint:
+      glob: '*.{js,mjs,cjs,ts,mts,cts,vue}'
+      run: pnpm exec eslint {staged_files}
+
+pre-push:
+  parallel: true
+  commands:
+    typecheck:
+      run: pnpm compile
+    test:
+      run: pnpm test
