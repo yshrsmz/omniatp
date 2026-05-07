@@ -43,6 +43,12 @@ export default tseslint.config(
   },
   eslintConfigPrettier,
   {
-    ignores: ['dist/**', 'node_modules/**', 'pnpm-lock.yaml'],
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      'pnpm-lock.yaml',
+      '.wxt/**',
+      '.output/**',
+    ],
   }
 )
