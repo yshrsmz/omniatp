@@ -11,14 +11,14 @@ export interface FakeLogger extends Logger {
 }
 
 export const createFakeLogger = (): FakeLogger => {
-  const fake = {
-    log: vi.fn<(...args: unknown[]) => void>(),
-    info: vi.fn<(...args: unknown[]) => void>(),
-    warn: vi.fn<(...args: unknown[]) => void>(),
-    error: vi.fn<(...args: unknown[]) => void>(),
-    debug: vi.fn<(...args: unknown[]) => void>(),
-    withTag: vi.fn<(tag: string) => Logger>(),
+  const fake: FakeLogger = {
+    log: vi.fn<Logger['log']>(),
+    info: vi.fn<Logger['info']>(),
+    warn: vi.fn<Logger['warn']>(),
+    error: vi.fn<Logger['error']>(),
+    debug: vi.fn<Logger['debug']>(),
+    withTag: vi.fn<Logger['withTag']>(),
   }
-  fake.withTag.mockReturnValue(fake as unknown as Logger)
-  return fake as unknown as FakeLogger
+  fake.withTag.mockReturnValue(fake)
+  return fake
 }

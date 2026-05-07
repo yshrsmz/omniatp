@@ -35,16 +35,12 @@ export type AtpAgentFactory = (options: AtpAgentOptions) => AtpAgent
 
 export class DefaultBskyRepository implements BskyRepository {
   readonly agent: AtpAgent
-  readonly localGateway: ConfigLocalGateway
-  readonly logger: Logger
 
   constructor(
-    localGateway: ConfigLocalGateway,
+    public readonly localGateway: ConfigLocalGateway,
     agentFactory: AtpAgentFactory,
-    logger: Logger
+    public readonly logger: Logger
   ) {
-    this.localGateway = localGateway
-    this.logger = logger
     this.agent = agentFactory({
       service: BskyConfig.service,
       persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {

@@ -8,10 +8,10 @@ export interface Logger {
 }
 
 export class ConsoleLogger implements Logger {
-  constructor(private readonly tag?: string) {}
+  private readonly prefix: readonly unknown[]
 
-  private get prefix(): string[] {
-    return this.tag ? [`[${this.tag}]`] : []
+  constructor(private readonly tag?: string) {
+    this.prefix = tag === undefined ? [] : [`[${tag}]`]
   }
 
   log(...args: unknown[]): void {
@@ -31,7 +31,7 @@ export class ConsoleLogger implements Logger {
   }
 
   withTag(tag: string): Logger {
-    return new ConsoleLogger(this.tag ? `${this.tag}:${tag}` : tag)
+    return new ConsoleLogger(this.tag === undefined ? tag : `${this.tag}:${tag}`)
   }
 }
 
