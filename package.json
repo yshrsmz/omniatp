@@ -14,32 +14,32 @@
     "lint:fix": "eslint --fix . && prettier -w ."
   },
   "dependencies": {
-    "@atproto/api": "0.18.8",
+    "@atproto/api": "0.19.11",
     "@atproto/xrpc": "0.7.7",
     "@headlessui/vue": "1.7.23",
     "@heroicons/vue": "2.2.0",
     "consola": "3.4.2",
     "date-fns": "4.1.0",
     "vest": "5.4.6",
-    "vue": "3.5.25"
+    "vue": "3.5.33"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.2",
-    "@tailwindcss/forms": "0.5.10",
-    "@tailwindcss/vite": "4.1.18",
-    "@types/chrome": "0.1.32",
+    "@eslint/js": "9.39.4",
+    "@tailwindcss/forms": "0.5.11",
+    "@tailwindcss/vite": "4.2.4",
+    "@types/chrome": "0.1.40",
     "@wxt-dev/module-vue": "1.0.3",
-    "eslint": "9.39.2",
+    "eslint": "9.39.4",
     "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-vue": "10.6.2",
+    "eslint-plugin-vue": "10.9.0",
     "globals": "17.6.0",
-    "postcss": "8.5.6",
-    "prettier": "3.7.4",
-    "tailwindcss": "4.1.18",
+    "postcss": "8.5.13",
+    "prettier": "3.8.3",
+    "tailwindcss": "4.2.4",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.50.0",
-    "vue-eslint-parser": "10.2.0",
+    "typescript-eslint": "8.59.1",
+    "vue-eslint-parser": "10.4.0",
     "wxt": "0.20.25"
   },
-  "packageManager": "pnpm@10.26.0"
+  "packageManager": "pnpm@10.33.2"
 }
