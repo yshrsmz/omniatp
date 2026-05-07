@@ -1,7 +1,7 @@
 import { ConfigLocalGateway } from './ConfigLocalGateway'
 
 export interface AppPreferencesRepository {
-  getCopyToClipboardOnPost(): Promise<boolean>
+  shouldCopyToClipboardOnPost(): Promise<boolean>
   setCopyToClipboardOnPost(value: boolean): Promise<void>
 }
 
@@ -10,8 +10,8 @@ export class DefaultAppPreferencesRepository
 {
   constructor(readonly localGateway: ConfigLocalGateway) {}
 
-  getCopyToClipboardOnPost(): Promise<boolean> {
-    return this.localGateway.getCopyToClipboardOnPost()
+  shouldCopyToClipboardOnPost(): Promise<boolean> {
+    return this.localGateway.shouldCopyToClipboardOnPost()
   }
 
   setCopyToClipboardOnPost(value: boolean): Promise<void> {

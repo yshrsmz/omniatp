@@ -61,7 +61,7 @@ export class OmniATP {
         payload.message
       )
 
-      if (await this.appPreferencesRepository.getCopyToClipboardOnPost()) {
+      if (await this.appPreferencesRepository.shouldCopyToClipboardOnPost()) {
         try {
           await this.chrome.copyToClipboard(payload.message)
         } catch (clipboardError) {

@@ -69,7 +69,7 @@ onMounted(async () => {
   const [p, template, copyOnPost] = await Promise.all([
     repo.getProfile(),
     component.postTemplateRepository().get(),
-    component.appPreferencesRepository().getCopyToClipboardOnPost(),
+    component.appPreferencesRepository().shouldCopyToClipboardOnPost(),
   ])
 
   console.log('profile', p)
