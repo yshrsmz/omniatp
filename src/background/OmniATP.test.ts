@@ -65,14 +65,7 @@ const buildOmni = (opts: BuildOmniOptions = {}) => {
   const prefs = opts.prefs ?? buildAppPrefs()
   const subCommands = opts.subCommands ?? []
   const logger = opts.logger ?? noopLogger
-  const omni = new OmniATP(
-    fakeClock,
-    chrome,
-    bsky,
-    prefs,
-    subCommands,
-    logger
-  )
+  const omni = new OmniATP(fakeClock, chrome, bsky, prefs, subCommands, logger)
   return { omni, bsky, chrome, prefs, subCommands, logger }
 }
 

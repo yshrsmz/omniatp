@@ -31,7 +31,9 @@ export class ConsoleLogger implements Logger {
   }
 
   withTag(tag: string): Logger {
-    return new ConsoleLogger(this.tag === undefined ? tag : `${this.tag}:${tag}`)
+    return new ConsoleLogger(
+      this.tag === undefined ? tag : `${this.tag}:${tag}`
+    )
   }
 }
 
