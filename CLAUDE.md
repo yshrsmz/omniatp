@@ -28,6 +28,17 @@ pnpm zip
 pnpm lint:fix
 ```
 
+## Release flow
+
+Releases are automated via [release-please](https://github.com/googleapis/release-please).
+
+1. Land changes on `main` using [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `feat!:` …). PR titles are squash-merged, so the PR title itself must be a Conventional Commit.
+2. The `release-please` workflow opens (or updates) a release PR that bumps `package.json`, updates `CHANGELOG.md`, and updates `.release-please-manifest.json`.
+3. Merging that release PR creates a `v*` git tag and a GitHub Release.
+4. The `Release` workflow runs on `release: published`, builds via `pnpm zip`, and uploads `.output/*.zip` to the Release as an asset.
+
+`wxt.config.ts` reads the version from `package.json`, so no manifest edits are needed during a release.
+
 ## Architecture
 
 ### Chrome Extension Structure
