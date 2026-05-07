@@ -19,11 +19,8 @@ export default defineConfig({
   vite: () => ({
     plugins: [tailwindcss()],
   }),
-  manifest: ({ command, mode }) => {
-    // `command === 'serve'` covers `wxt` (dev). `mode` fallback is for explicit
-    // `wxt build --mode development`; in WXT 0.20.25 that flag does not flip
-    // `mode` for the manifest function, but it's kept here defensively.
-    const isDev = command === 'serve' || mode === 'development'
+  manifest: ({ mode }) => {
+    const isDev = mode === 'development'
     return {
       name: isDev ? '[DEV] OmniATP' : 'OmniATP',
       version: `${major}.${minor}.${patch}.${label}`,
