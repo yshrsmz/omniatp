@@ -3,11 +3,12 @@ import { DefaultPostTemplateRepository } from './PostTemplateRepository'
 import { DefaultConfigLocalGateway } from './ConfigLocalGateway'
 import { InMemoryStorageDelegate } from '../test/InMemoryStorageDelegate'
 import { PostTemplate } from './model/PostTemplate'
+import { noopLogger } from '../Logger'
 
 describe('DefaultPostTemplateRepository', () => {
   const buildRepo = () => {
     const storage = new InMemoryStorageDelegate()
-    const gateway = new DefaultConfigLocalGateway(storage)
+    const gateway = new DefaultConfigLocalGateway(storage, noopLogger)
     const repo = new DefaultPostTemplateRepository(gateway)
     return { storage, gateway, repo }
   }

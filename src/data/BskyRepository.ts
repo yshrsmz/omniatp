@@ -12,6 +12,7 @@ import { LoginCredential } from './model/LoginCredential'
 import { ConfigLocalGateway } from './ConfigLocalGateway'
 import { LinkMeta } from './model/LinkMeta'
 import { BskyConfig } from '../Configs'
+import { Logger } from '../Logger'
 
 export interface BskyRepository {
   signIn(credential: LoginCredential): Promise<void>
@@ -35,12 +36,19 @@ export type AtpAgentFactory = (options: AtpAgentOptions) => AtpAgent
 export class DefaultBskyRepository implements BskyRepository {
   readonly agent: AtpAgent
   readonly localGateway: ConfigLocalGateway
+  readonly logger: Logger
 
-  constructor(localGateway: ConfigLocalGateway, agentFactory: AtpAgentFactory) {
+  constructor(
+    localGateway: ConfigLocalGateway,
+    agentFactory: AtpAgentFactory,
+    logger: Logger
+  ) {
     this.localGateway = localGateway
+    this.logger = logger
     this.agent = agentFactory({
       service: BskyConfig.service,
       persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
+        this.logger.log('persistSession', event, session)
         if (session && event !== 'create') {
           this.saveSessionIfNeeded(session)
           return
@@ -75,6 +83,7 @@ export class DefaultBskyRepository implements BskyRepository {
       shouldSave = !!session
     }
 
+    this.logger.log('saveSessionIfNeeded:', shouldSave, session)
     if (shouldSave && session) {
       await this.localGateway.saveSession(session)
     }
@@ -86,6 +95,7 @@ export class DefaultBskyRepository implements BskyRepository {
       password: credential.password,
     })
 
+    this.logger.log('login', res)
     // credential should already be saved via persistSession callback,
     // but should be saved here as well so that subsequent call can safely access bsky API
     if (res.success && res.data) {
@@ -105,7 +115,8 @@ export class DefaultBskyRepository implements BskyRepository {
   async resumeSession(): Promise<void> {
     const session = await this.localGateway.getSession()
     if (session) {
-      await this.agent.resumeSession(session)
+      const res = await this.agent.resumeSession(session)
+      this.logger.log('resumeSession', res)
     }
   }
 
@@ -130,6 +141,7 @@ export class DefaultBskyRepository implements BskyRepository {
     AppBskyActorDefs.ProfileViewDetailed | undefined
   > {
     const session = await this.localGateway.getSession()
+    this.logger.log('getProfile', session)
     if (session) {
       const res = await this.agent.getProfile({ actor: session.did })
       return res.data

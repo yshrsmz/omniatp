@@ -79,6 +79,23 @@ provides the real one (`new AtpAgent(options)`); tests pass a factory that
 returns a hand-rolled fake recording calls. This avoids `vi.mock` on the
 `@atproto/api` module and keeps the type contract honest.
 
+## Logging
+
+Logging goes through the `Logger` abstraction in `src/Logger.ts`, **not**
+through `console.*` directly. This keeps service-worker logs taggable
+(`logger.withTag('BskyRepository')` produces `[BskyRepository] …`) and makes
+tests silent by default.
+
+- `PlatformModule.logger()` returns a singleton `ConsoleLogger` (writes to
+  `console`). It is consumed by `DefaultDataModule` (passed in via the
+  constructor) and by `BackgroundComponent` when it builds `OmniATP`.
+- Each consumer receives a tagged child via `parent.withTag('ClassName')`.
+  Avoid threading the root logger directly into business code.
+- New code that wants to log should accept a `Logger` constructor argument —
+  do not reach for `console.log` / `console.error` directly. Tests should
+  pass `noopLogger` (silent) or a `createFakeLogger()` (assertable) from
+  `src/test/FakeLogger.ts`.
+
 ## Testing implications
 
 - **Construct collaborators directly in tests**, passing fakes/stubs as

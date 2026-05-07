@@ -6,6 +6,8 @@ import { createFakeChromeDelegate } from '../test/FakeChromeDelegate'
 import { BskyRepository } from '../data/BskyRepository'
 import { AppPreferencesRepository } from '../data/AppPreferencesRepository'
 import { Clock } from '../Clock'
+import { Logger, noopLogger } from '../Logger'
+import { createFakeLogger } from '../test/FakeLogger'
 
 const buildBskyRepository = (
   overrides: Partial<BskyRepository> = {}
@@ -49,40 +51,50 @@ const buildSubCommand = (
   handleEnterEvent: vi.fn(async () => enterPayload),
 })
 
+interface BuildOmniOptions {
+  bsky?: BskyRepository
+  chrome?: ReturnType<typeof createFakeChromeDelegate>
+  prefs?: AppPreferencesRepository
+  subCommands?: SubCommand[]
+  logger?: Logger
+}
+
+const buildOmni = (opts: BuildOmniOptions = {}) => {
+  const bsky = opts.bsky ?? buildBskyRepository()
+  const chrome = opts.chrome ?? createFakeChromeDelegate()
+  const prefs = opts.prefs ?? buildAppPrefs()
+  const subCommands = opts.subCommands ?? []
+  const logger = opts.logger ?? noopLogger
+  const omni = new OmniATP(
+    fakeClock,
+    chrome,
+    bsky,
+    prefs,
+    subCommands,
+    logger
+  )
+  return { omni, bsky, chrome, prefs, subCommands, logger }
+}
+
 describe('OmniATP.initialize', () => {
   it('resumes the session and registers a session-update listener', async () => {
-    const bsky = buildBskyRepository()
-    const omni = new OmniATP(
-      fakeClock,
-      createFakeChromeDelegate(),
-      bsky,
-      buildAppPrefs(),
-      []
-    )
-
+    const { omni, bsky } = buildOmni()
     await omni.initialize()
-
     expect(bsky.resumeSession).toHaveBeenCalled()
     expect(bsky.onSessionUpdate).toHaveBeenCalled()
   })
 
-  it('swallows errors from resumeSession so initialize never rejects', async () => {
+  it('logs and swallows errors from resumeSession so initialize never rejects', async () => {
     const bsky = buildBskyRepository({
       resumeSession: vi.fn(async () => {
         throw new Error('boom')
       }),
     })
-    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-    const omni = new OmniATP(
-      fakeClock,
-      createFakeChromeDelegate(),
-      bsky,
-      buildAppPrefs(),
-      []
-    )
+    const logger = createFakeLogger()
+    const { omni } = buildOmni({ bsky, logger })
 
     await expect(omni.initialize()).resolves.toBeUndefined()
-    expect(errSpy).toHaveBeenCalled()
+    expect(logger.error).toHaveBeenCalled()
   })
 
   it('on session update, resumes when no in-memory session exists but a new value arrived', async () => {
@@ -93,13 +105,7 @@ describe('OmniATP.initialize', () => {
         listener = l
       }),
     })
-    const omni = new OmniATP(
-      fakeClock,
-      createFakeChromeDelegate(),
-      bsky,
-      buildAppPrefs(),
-      []
-    )
+    const { omni } = buildOmni({ bsky })
     await omni.initialize()
 
     listener?.({ did: 'x' }, undefined)
@@ -116,13 +122,7 @@ describe('OmniATP.initialize', () => {
         listener = l
       }),
     })
-    const omni = new OmniATP(
-      fakeClock,
-      createFakeChromeDelegate(),
-      bsky,
-      buildAppPrefs(),
-      []
-    )
+    const { omni } = buildOmni({ bsky })
     await omni.initialize()
 
     listener?.(undefined, { did: 'x' })
@@ -133,23 +133,15 @@ describe('OmniATP.initialize', () => {
 
 describe('OmniATP.postStatus', () => {
   it('does nothing when the message is empty', async () => {
-    const bsky = buildBskyRepository()
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [])
-
+    const { omni, bsky, chrome } = buildOmni()
     await omni.postStatus({ message: '' })
-
     expect(bsky.createPost).not.toHaveBeenCalled()
     expect(chrome.createNotification).not.toHaveBeenCalled()
   })
 
   it('posts and shows a success notification', async () => {
-    const bsky = buildBskyRepository()
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [])
-
+    const { omni, bsky, chrome } = buildOmni()
     await omni.postStatus({ message: 'hello' })
-
     expect(bsky.createPost).toHaveBeenCalledWith('hello', undefined)
     expect(chrome.createNotification).toHaveBeenCalledWith(
       'icon/128.png',
@@ -159,49 +151,44 @@ describe('OmniATP.postStatus', () => {
   })
 
   it('copies to clipboard when the preference is enabled', async () => {
-    const bsky = buildBskyRepository()
-    const chrome = createFakeChromeDelegate()
-    const prefs = buildAppPrefs(true)
-    const omni = new OmniATP(fakeClock, chrome, bsky, prefs, [])
-
+    const { omni, chrome } = buildOmni({ prefs: buildAppPrefs(true) })
     await omni.postStatus({ message: 'hello' })
-
     expect(chrome.copyToClipboard).toHaveBeenCalledWith('hello')
   })
 
   it('skips clipboard copy when the preference is disabled', async () => {
-    const bsky = buildBskyRepository()
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(false), [])
-
+    const { omni, chrome } = buildOmni({ prefs: buildAppPrefs(false) })
     await omni.postStatus({ message: 'hello' })
-
     expect(chrome.copyToClipboard).not.toHaveBeenCalled()
   })
 
-  it('logs and does not surface clipboard errors', async () => {
-    const bsky = buildBskyRepository()
+  it('logs clipboard errors via the injected logger and does not surface them', async () => {
     const chrome = createFakeChromeDelegate({
       copyToClipboard: vi.fn(async () => {
         throw new Error('clipboard fail')
       }),
     })
-    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(true), [])
+    const logger = createFakeLogger()
+    const { omni } = buildOmni({
+      chrome,
+      prefs: buildAppPrefs(true),
+      logger,
+    })
 
     await expect(omni.postStatus({ message: 'hi' })).resolves.toBeUndefined()
-    expect(errSpy).toHaveBeenCalled()
+    expect(logger.error).toHaveBeenCalledWith(
+      'Failed to copy to clipboard',
+      expect.any(Error)
+    )
   })
 
   it('shows an error notification when createPost throws an XRPCError', async () => {
     const bsky = buildBskyRepository({
       createPost: vi.fn(async () => {
-        const err = new XRPCError(429, 'RateLimit')
-        throw err
+        throw new XRPCError(429, 'RateLimit')
       }),
     })
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [])
+    const { omni, chrome } = buildOmni({ bsky })
 
     await omni.postStatus({ message: 'hi' })
 
@@ -218,8 +205,7 @@ describe('OmniATP.postStatus', () => {
         throw new Error('something broke')
       }),
     })
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [])
+    const { omni, chrome } = buildOmni({ bsky })
 
     await omni.postStatus({ message: 'hi' })
 
@@ -229,13 +215,19 @@ describe('OmniATP.postStatus', () => {
       'something broke'
     )
   })
+
+  it('logs the payload before posting', async () => {
+    const logger = createFakeLogger()
+    const { omni } = buildOmni({ logger })
+    await omni.postStatus({ message: 'hello' })
+    expect(logger.log).toHaveBeenCalledWith('postStatus', { message: 'hello' })
+  })
 })
 
 describe('OmniATP.handleInputChengedEvent', () => {
   it('prompts the user to sign in when there is no session', async () => {
     const bsky = buildBskyRepository({ hasSession: vi.fn(() => false) })
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [])
+    const { omni, chrome } = buildOmni({ bsky })
 
     await omni.handleInputChengedEvent('anything')
 
@@ -245,10 +237,8 @@ describe('OmniATP.handleInputChengedEvent', () => {
   })
 
   it('routes to a matching sub-command when one matches', async () => {
-    const bsky = buildBskyRepository()
     const sub = buildSubCommand(':opt', (t) => t === ':opt')
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [sub])
+    const { omni, bsky, chrome } = buildOmni({ subCommands: [sub] })
 
     await omni.handleInputChengedEvent(':opt')
 
@@ -257,12 +247,8 @@ describe('OmniATP.handleInputChengedEvent', () => {
   })
 
   it('shows the remaining grapheme count for normal input', async () => {
-    const bsky = buildBskyRepository()
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [])
-
+    const { omni, chrome } = buildOmni()
     await omni.handleInputChengedEvent('hello')
-
     expect(chrome.showDefaultSuggestion).toHaveBeenCalledWith(
       `${300 - 5} characters left`
     )
@@ -272,8 +258,7 @@ describe('OmniATP.handleInputChengedEvent', () => {
 describe('OmniATP.handleInputEnteredEvent', () => {
   it('opens the options page when the user is not signed in', async () => {
     const bsky = buildBskyRepository({ hasSession: vi.fn(() => false) })
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [])
+    const { omni, chrome } = buildOmni({ bsky })
 
     await omni.handleInputEnteredEvent('anything')
 
@@ -282,23 +267,17 @@ describe('OmniATP.handleInputEnteredEvent', () => {
   })
 
   it('posts the typed text directly when no sub-command matches', async () => {
-    const bsky = buildBskyRepository()
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [])
-
+    const { omni, bsky } = buildOmni()
     await omni.handleInputEnteredEvent('hello world')
-
     expect(bsky.createPost).toHaveBeenCalledWith('hello world', undefined)
   })
 
   it('uses the sub-command payload when one matches', async () => {
-    const bsky = buildBskyRepository()
     const sub = buildSubCommand(':share', (t) => t.startsWith(':share'), {
       message: 'shared text',
       meta: undefined,
     })
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [sub])
+    const { omni, bsky, chrome } = buildOmni({ subCommands: [sub] })
 
     await omni.handleInputEnteredEvent(':share')
 
@@ -307,14 +286,12 @@ describe('OmniATP.handleInputEnteredEvent', () => {
   })
 
   it('skips posting when a sub-command returns undefined', async () => {
-    const bsky = buildBskyRepository()
     const sub = buildSubCommand(
       ':options',
       (t) => t.startsWith(':options'),
       undefined
     )
-    const chrome = createFakeChromeDelegate()
-    const omni = new OmniATP(fakeClock, chrome, bsky, buildAppPrefs(), [sub])
+    const { omni, bsky } = buildOmni({ subCommands: [sub] })
 
     await omni.handleInputEnteredEvent(':options')
 

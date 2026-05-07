@@ -41,6 +41,11 @@ mocking keeps the type system in play and makes failures easy to read.
 - **`createFakeChromeDelegate`** (`src/test/FakeChromeDelegate.ts`) — returns
   a `ChromeDelegate` whose methods are `vi.fn()`s. Pass `overrides` to swap
   individual methods (e.g. `currentPage`, `appVersion`).
+- **`createFakeLogger`** (`src/test/FakeLogger.ts`) — returns a `Logger`
+  whose every method is `vi.fn()`, with `withTag` returning the same fake.
+  Use this when a test needs to assert that something was logged. When the
+  test does not care about logging, pass `noopLogger` from `src/Logger.ts`
+  instead — it has zero overhead and no observable side effects.
 - **`headlessuiStubs`** (`src/test/headlessui-stubs.ts`) — lightweight stubs
   for `TransitionRoot`, `TransitionChild`, `Dialog`, `DialogPanel`,
   `DialogTitle`. Pass via `global.stubs` when mounting any component that

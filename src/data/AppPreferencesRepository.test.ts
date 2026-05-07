@@ -2,11 +2,12 @@ import { describe, expect, it } from 'vitest'
 import { DefaultAppPreferencesRepository } from './AppPreferencesRepository'
 import { DefaultConfigLocalGateway } from './ConfigLocalGateway'
 import { InMemoryStorageDelegate } from '../test/InMemoryStorageDelegate'
+import { noopLogger } from '../Logger'
 
 describe('DefaultAppPreferencesRepository', () => {
   const buildRepo = () => {
     const storage = new InMemoryStorageDelegate()
-    const gateway = new DefaultConfigLocalGateway(storage)
+    const gateway = new DefaultConfigLocalGateway(storage, noopLogger)
     const repo = new DefaultAppPreferencesRepository(gateway)
     return { storage, gateway, repo }
   }

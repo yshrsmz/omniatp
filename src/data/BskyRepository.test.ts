@@ -8,6 +8,7 @@ import {
 import { DefaultBskyRepository } from './BskyRepository'
 import { DefaultConfigLocalGateway } from './ConfigLocalGateway'
 import { InMemoryStorageDelegate } from '../test/InMemoryStorageDelegate'
+import { noopLogger } from '../Logger'
 
 const sampleSession: AtpSessionData = {
   did: 'did:plc:abc',
@@ -36,27 +37,31 @@ const buildRepo = (
   configure: (agent: FakeAgentInstance) => void = () => {}
 ) => {
   const storage = new InMemoryStorageDelegate()
-  const gateway = new DefaultConfigLocalGateway(storage)
+  const gateway = new DefaultConfigLocalGateway(storage, noopLogger)
   let captured: FakeAgentInstance | undefined
 
-  const repo = new DefaultBskyRepository(gateway, (options) => {
-    const agent: FakeAgentInstance = {
-      options,
-      hasSession: false,
-      login: vi.fn(),
-      logout: vi.fn(),
-      resumeSession: vi.fn(),
-      getProfile: vi.fn(),
-      post: vi.fn(),
-      triggerPersistSession: (event, session) => {
-        options.persistSession?.(event, session)
-      },
-    }
-    captured = agent
-    configure(agent)
-    // The repository expects an AtpAgent; we provide a structural stand-in.
-    return agent as unknown as ReturnType<typeof Object>
-  }) as DefaultBskyRepository & { agent: FakeAgentInstance }
+  const repo = new DefaultBskyRepository(
+    gateway,
+    (options) => {
+      const agent: FakeAgentInstance = {
+        options,
+        hasSession: false,
+        login: vi.fn(),
+        logout: vi.fn(),
+        resumeSession: vi.fn(),
+        getProfile: vi.fn(),
+        post: vi.fn(),
+        triggerPersistSession: (event, session) => {
+          options.persistSession?.(event, session)
+        },
+      }
+      captured = agent
+      configure(agent)
+      // The repository expects an AtpAgent; we provide a structural stand-in.
+      return agent as unknown as ReturnType<typeof Object>
+    },
+    noopLogger
+  ) as DefaultBskyRepository & { agent: FakeAgentInstance }
 
   if (!captured) throw new Error('agentFactory was not invoked')
   return { repo, agent: captured, gateway, storage }

@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { AtpSessionData } from '@atproto/api'
 import { DefaultConfigLocalGateway } from './ConfigLocalGateway'
 import { InMemoryStorageDelegate } from '../test/InMemoryStorageDelegate'
+import { noopLogger } from '../Logger'
 
 const sampleSession: AtpSessionData = {
   did: 'did:plc:abc',
@@ -12,27 +13,24 @@ const sampleSession: AtpSessionData = {
   active: true,
 }
 
+const buildGateway = () =>
+  new DefaultConfigLocalGateway(new InMemoryStorageDelegate(), noopLogger)
+
 describe('DefaultConfigLocalGateway', () => {
   describe('post prefix', () => {
     it('returns the default prefix when nothing is saved', async () => {
-      const gateway = new DefaultConfigLocalGateway(
-        new InMemoryStorageDelegate()
-      )
+      const gateway = buildGateway()
       expect(await gateway.getPostPrefix()).toBe('NowBrowsing: ')
     })
 
     it('round-trips the saved prefix', async () => {
-      const gateway = new DefaultConfigLocalGateway(
-        new InMemoryStorageDelegate()
-      )
+      const gateway = buildGateway()
       await gateway.savePostPrefix('Watching ')
       expect(await gateway.getPostPrefix()).toBe('Watching ')
     })
 
     it('clears the prefix back to the default', async () => {
-      const gateway = new DefaultConfigLocalGateway(
-        new InMemoryStorageDelegate()
-      )
+      const gateway = buildGateway()
       await gateway.savePostPrefix('Watching ')
       await gateway.clearPostPrefix()
       expect(await gateway.getPostPrefix()).toBe('NowBrowsing: ')
@@ -41,16 +39,12 @@ describe('DefaultConfigLocalGateway', () => {
 
   describe('copy to clipboard preference', () => {
     it('defaults to false', async () => {
-      const gateway = new DefaultConfigLocalGateway(
-        new InMemoryStorageDelegate()
-      )
+      const gateway = buildGateway()
       expect(await gateway.shouldCopyToClipboardOnPost()).toBe(false)
     })
 
     it('round-trips the saved value', async () => {
-      const gateway = new DefaultConfigLocalGateway(
-        new InMemoryStorageDelegate()
-      )
+      const gateway = buildGateway()
       await gateway.saveCopyToClipboardOnPost(true)
       expect(await gateway.shouldCopyToClipboardOnPost()).toBe(true)
     })
@@ -58,33 +52,25 @@ describe('DefaultConfigLocalGateway', () => {
 
   describe('session', () => {
     it('returns undefined when no session is saved', async () => {
-      const gateway = new DefaultConfigLocalGateway(
-        new InMemoryStorageDelegate()
-      )
+      const gateway = buildGateway()
       expect(await gateway.getSession()).toBeUndefined()
     })
 
     it('round-trips a session', async () => {
-      const gateway = new DefaultConfigLocalGateway(
-        new InMemoryStorageDelegate()
-      )
+      const gateway = buildGateway()
       await gateway.saveSession(sampleSession)
       expect(await gateway.getSession()).toEqual(sampleSession)
     })
 
     it('clears the session', async () => {
-      const gateway = new DefaultConfigLocalGateway(
-        new InMemoryStorageDelegate()
-      )
+      const gateway = buildGateway()
       await gateway.saveSession(sampleSession)
       await gateway.clearSession()
       expect(await gateway.getSession()).toBeUndefined()
     })
 
     it('notifies onSessionUpdate when the session key changes', async () => {
-      const gateway = new DefaultConfigLocalGateway(
-        new InMemoryStorageDelegate()
-      )
+      const gateway = buildGateway()
       const listener = vi.fn()
       gateway.onSessionUpdate(listener)
 
@@ -97,9 +83,7 @@ describe('DefaultConfigLocalGateway', () => {
     })
 
     it('does not notify when an unrelated key changes', async () => {
-      const gateway = new DefaultConfigLocalGateway(
-        new InMemoryStorageDelegate()
-      )
+      const gateway = buildGateway()
       const listener = vi.fn()
       gateway.onSessionUpdate(listener)
 

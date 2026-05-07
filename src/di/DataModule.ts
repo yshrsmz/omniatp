@@ -19,6 +19,7 @@ import {
   AppPreferencesRepository,
   DefaultAppPreferencesRepository,
 } from '../data/AppPreferencesRepository'
+import { Logger } from '../Logger'
 
 export interface DataModule {
   clock(): Clock
@@ -39,6 +40,8 @@ export class DefaultDataModule implements DataModule {
   private _postTemplateRepository?: PostTemplateRepository
   private _appPreferencesRepository?: AppPreferencesRepository
 
+  constructor(private readonly logger: Logger) {}
+
   clock(): Clock {
     return getOrCreate(
       this._clock,
@@ -58,7 +61,11 @@ export class DefaultDataModule implements DataModule {
   configLocalGateway(storage: ChromeStorageDelegate): ConfigLocalGateway {
     return getOrCreate(
       this._configLocalGateway,
-      () => new DefaultConfigLocalGateway(storage),
+      () =>
+        new DefaultConfigLocalGateway(
+          storage,
+          this.logger.withTag('ConfigLocalGateway')
+        ),
       (v) => (this._configLocalGateway = v)
     )
   }
@@ -69,7 +76,8 @@ export class DefaultDataModule implements DataModule {
       () =>
         new DefaultBskyRepository(
           this.configLocalGateway(storage),
-          this.atpAgentFactory()
+          this.atpAgentFactory(),
+          this.logger.withTag('BskyRepository')
         ),
       (v) => (this._bskyRepository = v)
     )

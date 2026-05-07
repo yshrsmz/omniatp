@@ -4,6 +4,7 @@ import { BskyRepository } from '../data/BskyRepository'
 import { AppPreferencesRepository } from '../data/AppPreferencesRepository'
 import { Payload, SubCommand } from './SubCommands'
 import { XRPCError } from '@atproto/xrpc'
+import { Logger } from '../Logger'
 
 const extractError = (
   e: unknown
@@ -22,7 +23,8 @@ export class OmniATP {
     readonly chrome: ChromeDelegate,
     readonly bskyRepository: BskyRepository,
     readonly appPreferencesRepository: AppPreferencesRepository,
-    readonly subCommands: SubCommand[]
+    readonly subCommands: SubCommand[],
+    readonly logger: Logger
   ) {}
 
   async initialize() {
@@ -30,7 +32,7 @@ export class OmniATP {
       await this.bskyRepository.resumeSession()
     } catch (e) {
       // not resumeable
-      console.error(e)
+      this.logger.error(e)
     }
 
     this.bskyRepository.onSessionUpdate((newValue, _oldValue) => {
@@ -51,7 +53,7 @@ export class OmniATP {
     }
 
     try {
-      console.log('postStatus', payload)
+      this.logger.log('postStatus', payload)
 
       await this.bskyRepository.createPost(payload.message, payload.meta)
 
@@ -65,7 +67,7 @@ export class OmniATP {
         try {
           await this.chrome.copyToClipboard(payload.message)
         } catch (clipboardError) {
-          console.error('Failed to copy to clipboard', clipboardError)
+          this.logger.error('Failed to copy to clipboard', clipboardError)
         }
       }
     } catch (e) {

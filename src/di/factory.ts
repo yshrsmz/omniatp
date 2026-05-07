@@ -10,15 +10,17 @@ import { DefaultPlatformModule } from './PlatformModule'
 export const createBackgroundComponent = (
   chrome: Chrome
 ): BackgroundComponent => {
+  const platformModule = new DefaultPlatformModule(chrome)
   return new DefaultBackgroundComponent(
-    new DefaultDataModule(),
-    new DefaultPlatformModule(chrome)
+    new DefaultDataModule(platformModule.logger()),
+    platformModule
   )
 }
 
 export const createOptionsComponent = (chrome: Chrome): OptionsComponent => {
+  const platformModule = new DefaultPlatformModule(chrome)
   return new DefaultOptionsComponent(
-    new DefaultDataModule(),
-    new DefaultPlatformModule(chrome)
+    new DefaultDataModule(platformModule.logger()),
+    platformModule
   )
 }

@@ -7,16 +7,19 @@ import {
   DefaultChromeStorageDelegate,
 } from '../platform/ChromeStorageDelegate'
 import { Chrome } from '../utils'
+import { ConsoleLogger, Logger } from '../Logger'
 import { getOrCreate } from './helper'
 
 export interface PlatformModule {
   storageDelegate(): ChromeStorageDelegate
   chromeDelegate(): ChromeDelegate
+  logger(): Logger
 }
 
 export class DefaultPlatformModule implements PlatformModule {
   private _storageDelegate?: ChromeStorageDelegate
   private _chromeDelegate?: ChromeDelegate
+  private _logger?: Logger
 
   constructor(readonly chrome: Chrome) {}
 
@@ -33,6 +36,14 @@ export class DefaultPlatformModule implements PlatformModule {
       this._chromeDelegate,
       () => new DefaultChromeDelegate(this.chrome),
       (v) => (this._chromeDelegate = v)
+    )
+  }
+
+  logger(): Logger {
+    return getOrCreate(
+      this._logger,
+      () => new ConsoleLogger(),
+      (v) => (this._logger = v)
     )
   }
 }
