@@ -39,6 +39,19 @@ Releases are automated via [release-please](https://github.com/googleapis/releas
 
 `wxt.config.ts` reads the version from `package.json`, so no manifest edits are needed during a release.
 
+### GitHub App setup (one-time)
+
+The `release-please` workflow uses a GitHub App token instead of `GITHUB_TOKEN` so that the Release it creates triggers downstream `release: published` workflows (the default `GITHUB_TOKEN` is deliberately blocked from triggering further workflow runs).
+
+1. Create a GitHub App owned by the repo owner: <https://github.com/settings/apps/new>
+   - **Repository permissions**: `Contents: Read and write`, `Pull requests: Read and write`, `Issues: Read and write`.
+   - Uncheck "Active" under Webhook (no webhook needed).
+2. After creation, generate a **private key** (`.pem`) and note the **App ID**.
+3. Install the App on this repository.
+4. Add two repository secrets:
+   - `RELEASE_PLEASE_APP_ID` — the App ID
+   - `RELEASE_PLEASE_APP_PRIVATE_KEY` — full contents of the `.pem` file
+
 ## Architecture
 
 ### Chrome Extension Structure
