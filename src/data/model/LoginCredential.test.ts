@@ -3,7 +3,7 @@ import { suite } from './LoginCredential'
 
 describe('LoginCredential.suite', () => {
   it('reports both fields as missing when nothing is provided', () => {
-    const result = suite({})
+    const result = suite.run({})
 
     expect(result.isValid()).toBe(false)
     expect(result.hasErrors('identifier')).toBe(true)
@@ -11,14 +11,14 @@ describe('LoginCredential.suite', () => {
   })
 
   it('uses the configured error messages', () => {
-    const result = suite({})
+    const result = suite.run({})
 
     expect(result.getErrors('identifier')).toEqual(['Identifier is required'])
     expect(result.getErrors('password')).toEqual(['Password is required'])
   })
 
   it('reports only the missing field when one is provided', () => {
-    const result = suite({ identifier: 'me.bsky.social' })
+    const result = suite.run({ identifier: 'me.bsky.social' })
 
     expect(result.isValid()).toBe(false)
     expect(result.hasErrors('identifier')).toBe(false)
@@ -26,7 +26,7 @@ describe('LoginCredential.suite', () => {
   })
 
   it('passes when both fields are non-blank', () => {
-    const result = suite({
+    const result = suite.run({
       identifier: 'me.bsky.social',
       password: 'hunter2',
     })
@@ -38,14 +38,14 @@ describe('LoginCredential.suite', () => {
   })
 
   it('treats whitespace-only input as blank', () => {
-    const result = suite({ identifier: '   ', password: '   ' })
+    const result = suite.run({ identifier: '   ', password: '   ' })
 
     expect(result.hasErrors('identifier')).toBe(true)
     expect(result.hasErrors('password')).toBe(true)
   })
 
   it('treats undefined as blank when called with no argument', () => {
-    const result = suite()
+    const result = suite.run()
 
     expect(result.isValid()).toBe(false)
     expect(result.hasErrors('identifier')).toBe(true)
