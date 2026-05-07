@@ -1,17 +1,29 @@
 {
-  "extends": ["config:recommended", ":pinDependencies", ":pinDevDependencies"],
+  "extends": ["config:best-practices", ":pinDependencies", ":pinDevDependencies"],
   "reviewers": ["yshrsmz"],
   "lockFileMaintenance": {
     "enabled": true
   },
   "dependencyDashboard": true,
-  "prConcurrentLimit": 1,
+  "prConcurrentLimit": 3,
   "packageRules": [
     {
+      "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch",
-      "matchPackageNames": ["*"]
+      "groupName": "npm non-major dependencies",
+      "groupSlug": "npm-minor-patch"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "github-actions non-major dependencies",
+      "groupSlug": "github-actions-minor-patch"
+    },
+    {
+      "matchManagers": ["mise"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "mise non-major dependencies",
+      "groupSlug": "mise-minor-patch"
     },
     {
       "matchPackageNames": ["vite", "@vitejs{/,}**"],
