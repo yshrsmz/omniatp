@@ -26,11 +26,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm build
+      - name: Build & Zip
+        run: pnpm zip
 
       - name: Upload extension
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: omniatp-${{ github.ref_name }}
-          path: ./dist
+          path: .output/*.zip
