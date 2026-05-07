@@ -41,7 +41,7 @@ const handleCancel = () => {
 }
 
 const handleFormInput = () => {
-  const result = suite({
+  const result = suite.run({
     identifier: identifierRef.value,
     password: passwordRef.value,
   })
@@ -67,7 +67,7 @@ const handleFormSubmit = () => {
     password: passwordRef.value,
   } satisfies LoginCredential
 
-  const result = suite(credential)
+  const result = suite.run(credential)
 
   if (result.isValid()) {
     emit('signin', credential)

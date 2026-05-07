@@ -27,8 +27,8 @@ importers:
         specifier: 4.1.0
         version: 4.1.0
       vest:
-        specifier: 5.4.6
-        version: 5.4.6
+        specifier: 6.3.2
+        version: 6.3.2
       vue:
         specifier: 3.5.33
         version: 3.5.33(typescript@6.0.3)
@@ -1165,8 +1165,8 @@ packages:
     resolution: {integrity: sha512-5IKcdX0nnYavi6G7TtOhwkYzyjfJlatbjMjuLSfE2kYT5pMDOilZ4OvMhi637CcDICTmz3wARPoyhqyX1Y+XvA==}
     engines: {node: ^14.18.0 || >=16.10.0}
 
-  context@3.1.0:
-    resolution: {integrity: sha512-foRhGPhITOiZWqoDx9oUv0UXidbgib9wWDykR7n5pZNa7hvW8rbM/KX+yoc91PbhuiRBWdBvO2f83DUy7N27Ww==}
+  context@4.0.17:
+    resolution: {integrity: sha512-SM/Rmr9egp0N3+t0kfIFz1Dayfcl+8bussTdW0lw9gU+KUe3v+QPVyxvr+KzVx13U5Ac0dCdjGacWION6NuRUQ==}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -2037,8 +2037,8 @@ packages:
     resolution: {integrity: sha512-I7tSVxHGPlmPN/enE3mS1aOSo6bWBfls+3HmuEeCUBCE7gWnm3cBXCBkpurzFjVRwC6Kld8lLaZ1Iv5vOcjvcQ==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  n4s@5.0.28:
-    resolution: {integrity: sha512-64ap7Qn8Oyua2ImIZH6/pkql89qyiTZ4jJqpS2g863++0tgbM4cuv3KJvZqMpa8kY2ovZ4q3cD0/KU4SImjg5g==}
+  n4s@6.2.1:
+    resolution: {integrity: sha512-j1kYy6fD0wfIsvUiaSnKGQxKJ9ZWJDwwbX8muh2/Y1j+qDADFc+e/Ggy/Hvj3dYU3zQsvuSpViOsNY/nkNCDZQ==}
 
   nano-spawn@2.1.0:
     resolution: {integrity: sha512-yTW+2okrElHiH4fsiz/+/zc0EDo9BDDoC3iKk8dpv1GeRc9nUWzUZHx6TofMWErchhUQR8hY9/Eu1Uja9x1nqA==}
@@ -2612,17 +2612,14 @@ packages:
     deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
-  vast@1.1.0:
-    resolution: {integrity: sha512-+NLhVyK8sjgagou51U3YVOjhfQVb8nq7QK7C6D3c2Jghgoblz+VbpiGfeq/xtPYFQFidKsbXxY4qFFoHYZ2A+Q==}
+  vest-utils@2.0.17:
+    resolution: {integrity: sha512-12gNz4I3oXKO12sp4B0UBgY1b/m4Zmd7e7x1EDQkIDf/N+DHCOk1h16YGM6g/zZS1ZoJMvL35SADcEsZ+YMN3g==}
 
-  vest-utils@1.5.0:
-    resolution: {integrity: sha512-nHbYeo3ZhMfttkzwrrHaU1OfJuNTrkWwme5kGDZOKhpdb8tYs8fBxhE9S7U/2uVLBLVPwNSGXul7lgopB1vSJQ==}
+  vest@6.3.2:
+    resolution: {integrity: sha512-gpXsKohvbntw2Z4VKNw04tax3EG4Av7z/8JyAe5qmpRUn2mxzPUh2OhmEf485i8v+oiCH49R+R6owVHYYlreGw==}
 
-  vest@5.4.6:
-    resolution: {integrity: sha512-Q3KQYluxdjnz5/HmR8coHNlXbJPLWMfrwz4wlcqMX4SaJ8qcmy5Ix9NTiQt3hTMrETdj+q+513J/kt+ahdJlLg==}
-
-  vestjs-runtime@1.7.0:
-    resolution: {integrity: sha512-b9CLKaNJopi7zXfJYZY9WYw4EOCIp1lsjheeq9ckNh9Qh7Dze1+yXQ1stwFw+oe22H7zJy/+vjn4/yJSoaDbpw==}
+  vestjs-runtime@2.0.17:
+    resolution: {integrity: sha512-6U2jLwvqtVSOE/kS0YFDZFLBT6a5TJEod787MVE4w691M32bW0y8uWZWquIJ7a96929/p/afH5lcVt4XGef1YQ==}
 
   vite-node@6.0.0:
     resolution: {integrity: sha512-oj4PVrT+pDh6GYf5wfUXkcZyekYS8kKPfLPXVl8qe324Ec6l4K2DUKNadRbZ3LQl0qGcDz+PyOo7ZAh00Y+JjQ==}
@@ -3881,9 +3878,9 @@ snapshots:
 
   consola@3.4.2: {}
 
-  context@3.1.0:
+  context@4.0.17:
     dependencies:
-      vest-utils: 1.5.0
+      vest-utils: 2.0.17
 
   convert-source-map@2.0.0: {}
 
@@ -4694,10 +4691,10 @@ snapshots:
       array-union: 3.0.1
       minimatch: 3.1.5
 
-  n4s@5.0.28:
+  n4s@6.2.1:
     dependencies:
-      context: 3.1.0
-      vest-utils: 1.5.0
+      context: 4.0.17
+      vest-utils: 2.0.17
 
   nano-spawn@2.1.0: {}
 
@@ -5277,24 +5274,19 @@ snapshots:
 
   uuid@8.3.2: {}
 
-  vast@1.1.0:
-    dependencies:
-      vest-utils: 1.5.0
+  vest-utils@2.0.17: {}
 
-  vest-utils@1.5.0: {}
-
-  vest@5.4.6:
+  vest@6.3.2:
     dependencies:
-      context: 3.1.0
-      n4s: 5.0.28
-      vast: 1.1.0
-      vest-utils: 1.5.0
-      vestjs-runtime: 1.7.0
+      context: 4.0.17
+      n4s: 6.2.1
+      vest-utils: 2.0.17
+      vestjs-runtime: 2.0.17
 
-  vestjs-runtime@1.7.0:
+  vestjs-runtime@2.0.17:
     dependencies:
-      context: 3.1.0
-      vest-utils: 1.5.0
+      context: 4.0.17
+      vest-utils: 2.0.17
 
   vite-node@6.0.0(@types/node@25.6.0)(esbuild@0.27.7)(jiti@2.7.0):
     dependencies:
