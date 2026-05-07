@@ -28,6 +28,30 @@ pnpm zip
 pnpm lint:fix
 ```
 
+## Release flow
+
+Releases are automated via [release-please](https://github.com/googleapis/release-please).
+
+1. Land changes on `main` using [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `feat!:` …). PR titles are squash-merged, so the PR title itself must be a Conventional Commit.
+2. The `release-please` workflow opens (or updates) a release PR that bumps `package.json`, updates `CHANGELOG.md`, and updates `.release-please-manifest.json`.
+3. Merging that release PR creates a `v*` git tag and a GitHub Release.
+4. The `Release` workflow runs on `release: published`, builds via `pnpm zip`, and uploads `.output/*.zip` to the Release as an asset.
+
+`wxt.config.ts` reads the version from `package.json`, so no manifest edits are needed during a release.
+
+### GitHub App setup (one-time)
+
+The `release-please` workflow uses a GitHub App token instead of `GITHUB_TOKEN` so that the Release it creates triggers downstream `release: published` workflows (the default `GITHUB_TOKEN` is deliberately blocked from triggering further workflow runs).
+
+1. Create a GitHub App owned by the repo owner: <https://github.com/settings/apps/new>
+   - **Repository permissions**: `Contents: Read and write`, `Pull requests: Read and write`, `Issues: Read and write`.
+   - Uncheck "Active" under Webhook (no webhook needed).
+2. After creation, generate a **private key** (`.pem`) and note the **Client ID** (shown on the App's "General" page; preferred over App ID per the upstream action's recommendation).
+3. Install the App on this repository.
+4. Add two repository secrets:
+   - `RELEASE_PLEASE_APP_CLIENT_ID` — the App's Client ID
+   - `RELEASE_PLEASE_APP_PRIVATE_KEY` — full contents of the `.pem` file
+
 ## Architecture
 
 ### Chrome Extension Structure
