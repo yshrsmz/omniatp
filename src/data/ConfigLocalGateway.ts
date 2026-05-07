@@ -1,5 +1,6 @@
 import { AtpSessionData } from '@atproto/api'
 import { ChromeStorageDelegate } from '../platform/ChromeStorageDelegate'
+import { Logger } from '../Logger'
 
 export interface ConfigLocalGateway {
   getPostPrefix(): Promise<string>
@@ -18,7 +19,10 @@ export interface ConfigLocalGateway {
 }
 
 export class DefaultConfigLocalGateway implements ConfigLocalGateway {
-  constructor(readonly storage: ChromeStorageDelegate) {}
+  constructor(
+    readonly storage: ChromeStorageDelegate,
+    readonly logger: Logger
+  ) {}
 
   async getPostPrefix(): Promise<string> {
     const { postPrefix } = await this.storage.get({
@@ -47,7 +51,7 @@ export class DefaultConfigLocalGateway implements ConfigLocalGateway {
   }
 
   async saveSession(session: AtpSessionData): Promise<void> {
-    console.log('saveSession', session)
+    this.logger.log('saveSession', session)
     return this.storage.save({ session })
   }
 
@@ -59,7 +63,7 @@ export class DefaultConfigLocalGateway implements ConfigLocalGateway {
   }
 
   async clearSession(): Promise<void> {
-    console.log('clearSession')
+    this.logger.log('clearSession')
     await this.storage.remove(['session'])
   }
 

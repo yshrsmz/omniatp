@@ -44,7 +44,8 @@ export class DefaultBackgroundComponent implements BackgroundComponent {
           this.dataModule.appPreferencesRepository(
             this.platformModule.storageDelegate()
           ),
-          this.subCommands()
+          this.subCommands(),
+          this.platformModule.logger().withTag('OmniATP')
         ),
       (v) => (this._omniatp = v)
     )
