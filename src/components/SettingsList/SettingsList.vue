@@ -100,11 +100,7 @@ const handleUpdateAmazonAssociateId = (id: string) => {
         @update:associate-id="handleUpdateAmazonAssociateId"
       />
       <SettingsListHeader title="Others" />
-      <SettingsListItem class="!border-t-0">
-        <p>App Version</p>
-        <template #subtext>{{ appVersion }}</template>
-      </SettingsListItem>
-      <ChangelogItem />
+      <ChangelogItem class="!border-t-0" :app-version="appVersion" />
       <SettingsListItem as="a" :href="developer.url" target="_blank">
         <p>Developer</p>
         <template #subtext>{{ developer.name }}</template>
