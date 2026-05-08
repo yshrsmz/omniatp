@@ -38,7 +38,7 @@
     "@wxt-dev/module-vue": "1.0.3",
     "eslint": "10.3.0",
     "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-vue": "10.9.0",
+    "eslint-plugin-vue": "10.9.1",
     "globals": "17.6.0",
     "jsdom": "29.1.1",
     "lefthook": "2.1.6",
