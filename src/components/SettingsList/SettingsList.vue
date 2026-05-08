@@ -6,6 +6,7 @@ import PostPrefixItem from './PostPrefixItem.vue'
 import CopyToClipboardItem from './CopyToClipboardItem.vue'
 import AmazonDomainItem from './AmazonDomainItem.vue'
 import AmazonAssociateIdItem from './AmazonAssociateIdItem.vue'
+import ChangelogItem from './ChangelogItem.vue'
 import SettingsListHeader from './SettingsListHeader.vue'
 import { AppBskyActorDefs } from '@atproto/api'
 import SettingsListItem from './SettingsListItem.vue'
@@ -103,6 +104,7 @@ const handleUpdateAmazonAssociateId = (id: string) => {
         <p>App Version</p>
         <template #subtext>{{ appVersion }}</template>
       </SettingsListItem>
+      <ChangelogItem />
       <SettingsListItem as="a" :href="developer.url" target="_blank">
         <p>Developer</p>
         <template #subtext>{{ developer.name }}</template>
