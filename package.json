@@ -50,5 +50,5 @@
     "vue-eslint-parser": "10.4.0",
     "wxt": "0.20.25"
   },
-  "packageManager": "pnpm@10.33.2"
+  "packageManager": "pnpm@11.0.5"
 }
