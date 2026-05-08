@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import {
   TransitionRoot,
   TransitionChild,
@@ -8,7 +9,7 @@ import {
 } from '@headlessui/vue'
 import { parseInline, type Changelog } from '../../data/model/Changelog'
 
-defineProps<{
+const props = defineProps<{
   show: boolean
   changelog: Changelog
 }>()
@@ -16,6 +17,19 @@ defineProps<{
 const emit = defineEmits<{
   (event: 'update:show', value: boolean): void
 }>()
+
+const tokenizedReleases = computed(() =>
+  props.changelog.releases.map((release) => ({
+    ...release,
+    sections: release.sections.map((section) => ({
+      ...section,
+      items: section.items.map((item) => ({
+        ...item,
+        descriptionTokens: parseInline(item.description),
+      })),
+    })),
+  }))
+)
 
 const handleClose = () => {
   emit('update:show', false)
@@ -72,7 +86,7 @@ const handleClose = () => {
                 </p>
                 <ul v-else class="space-y-6">
                   <li
-                    v-for="release in changelog.releases"
+                    v-for="release in tokenizedReleases"
                     :key="release.version"
                   >
                     <h4 class="text-base font-semibold text-gray-900">
@@ -116,10 +130,10 @@ const handleClose = () => {
                             >
                             <span :class="{ 'ml-1': item.scope }">
                               <template
-                                v-for="(token, tokenIndex) in parseInline(
-                                  item.description
-                                )"
-                                :key="`tok-${tokenIndex}`"
+                                v-for="(
+                                  token, tokenIndex
+                                ) in item.descriptionTokens"
+                                :key="`${tokenIndex}-${token.type}`"
                               >
                                 <code
                                   v-if="token.type === 'code'"
