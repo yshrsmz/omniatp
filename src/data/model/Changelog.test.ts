@@ -135,4 +135,50 @@ describe('parseChangelog', () => {
     const result = parseChangelog(md)
     expect(result.releases[0].sections).toEqual([])
   })
+
+  it('handles preamble paragraphs, emoji section titles, and prose items', () => {
+    const md = `# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
+to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.20.0](https://github.com/x/y/compare/v0.19.0...v0.20.0) (2026-05-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* \`Foo\` fields are now \`Property<String>\`. Common-case usage (\`packageName = "..."\`) is preserved on Gradle 8.2+. Code reading \`extension.packageName\` directly must switch to \`.set(...)\` and \`.orNull\` / \`.get()\` respectively.
+
+### Features
+
+* support standalone Kotlin/JVM and Kotlin/JS projects ([#296](https://example.com/i296)) ([0e46e94](https://example.com/c0e4))
+
+### Code Refactoring
+
+* migrate to Provider API ([5d479eb](https://example.com/c5d4))
+`
+    const result = parseChangelog(md)
+    expect(result.releases).toHaveLength(1)
+    const release = result.releases[0]
+    expect(release.version).toBe('0.20.0')
+    expect(release.sections.map((s) => s.title)).toEqual([
+      '⚠ BREAKING CHANGES',
+      'Features',
+      'Code Refactoring',
+    ])
+
+    const breaking = release.sections[0].items[0]
+    expect(breaking.scope).toBeUndefined()
+    expect(breaking.description).toContain('Property<String>')
+    expect(breaking.description).toContain('packageName = "..."')
+    expect(breaking.links).toEqual([])
+
+    const refactor = release.sections[2].items[0]
+    expect(refactor.description).toBe('migrate to Provider API')
+    expect(refactor.links).toEqual([
+      { text: '5d479eb', url: 'https://example.com/c5d4' },
+    ])
+  })
 })
