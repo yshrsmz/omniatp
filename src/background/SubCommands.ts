@@ -1,4 +1,5 @@
 import { PostTemplateRepository } from '../data/PostTemplateRepository'
+import { AmazonAssociateRepository } from '../data/AmazonAssociateRepository'
 import { LinkMeta } from '../data/model/LinkMeta'
 import { ChromeDelegate } from '../platform/ChromeDelegate'
 
@@ -72,7 +73,8 @@ export class Share implements SubCommand {
   description = 'Share url to twitter'
 
   constructor(
-    private readonly postTemplateRepository: PostTemplateRepository
+    private readonly postTemplateRepository: PostTemplateRepository,
+    private readonly amazonAssociateRepository: AmazonAssociateRepository
   ) {}
 
   test(command: string) {
@@ -93,20 +95,20 @@ export class Share implements SubCommand {
     chrome: ChromeDelegate
   ): Promise<Payload> {
     const currentPage = await chrome.currentPage()
-    const template = await this.postTemplateRepository.get()
+    const [template, associate] = await Promise.all([
+      this.postTemplateRepository.get(),
+      this.amazonAssociateRepository.get(),
+    ])
 
     let message = 'unable to share this page'
     let meta: LinkMeta | undefined = undefined
     if (currentPage && currentPage.url && currentPage.title) {
       const userInput = this.extractUserInput(command)
+      const url = associate.buildAssociateUrlOrReturnAsIs(currentPage.url)
 
-      message = template.buildPost(
-        userInput ?? '',
-        currentPage.title,
-        currentPage.url
-      )
+      message = template.buildPost(userInput ?? '', currentPage.title, url)
       meta = {
-        uri: currentPage.url,
+        uri: url,
         title: currentPage.title,
         description: '',
       }

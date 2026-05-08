@@ -19,6 +19,10 @@ import {
   AppPreferencesRepository,
   DefaultAppPreferencesRepository,
 } from '../data/AppPreferencesRepository'
+import {
+  AmazonAssociateRepository,
+  DefaultAmazonAssociateRepository,
+} from '../data/AmazonAssociateRepository'
 import { Logger } from '../Logger'
 
 const defaultAtpAgentFactory: AtpAgentFactory = (options) =>
@@ -33,6 +37,9 @@ export interface DataModule {
   appPreferencesRepository(
     storage: ChromeStorageDelegate
   ): AppPreferencesRepository
+  amazonAssociateRepository(
+    storage: ChromeStorageDelegate
+  ): AmazonAssociateRepository
 }
 
 export class DefaultDataModule implements DataModule {
@@ -41,6 +48,7 @@ export class DefaultDataModule implements DataModule {
   private _bskyRepository?: BskyRepository
   private _postTemplateRepository?: PostTemplateRepository
   private _appPreferencesRepository?: AppPreferencesRepository
+  private _amazonAssociateRepository?: AmazonAssociateRepository
 
   constructor(private readonly logger: Logger) {}
 
@@ -99,6 +107,17 @@ export class DefaultDataModule implements DataModule {
       () =>
         new DefaultAppPreferencesRepository(this.configLocalGateway(storage)),
       (v) => (this._appPreferencesRepository = v)
+    )
+  }
+
+  amazonAssociateRepository(
+    storage: ChromeStorageDelegate
+  ): AmazonAssociateRepository {
+    return getOrCreate(
+      this._amazonAssociateRepository,
+      () =>
+        new DefaultAmazonAssociateRepository(this.configLocalGateway(storage)),
+      (v) => (this._amazonAssociateRepository = v)
     )
   }
 }

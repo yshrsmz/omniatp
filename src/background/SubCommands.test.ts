@@ -3,6 +3,8 @@ import { Options, Share, Version } from './SubCommands'
 import { createFakeChromeDelegate } from '../test/FakeChromeDelegate'
 import { PostTemplateRepository } from '../data/PostTemplateRepository'
 import { PostTemplate } from '../data/model/PostTemplate'
+import { AmazonAssociateRepository } from '../data/AmazonAssociateRepository'
+import { AmazonAssociate } from '../data/model/AmazonAssociate'
 
 describe('Options sub-command', () => {
   const sub = new Options()
@@ -58,13 +60,23 @@ describe('Version sub-command', () => {
 })
 
 describe('Share sub-command', () => {
-  const buildShare = (prefix = 'NowBrowsing: ') => {
+  const buildShare = (
+    options: { prefix?: string; associate?: AmazonAssociate } = {}
+  ) => {
+    const { prefix = 'NowBrowsing: ', associate = AmazonAssociate.empty() } =
+      options
     const repo: PostTemplateRepository = {
       get: vi.fn(async () => new PostTemplate(prefix)),
       save: vi.fn(),
       clear: vi.fn(),
     }
-    return { share: new Share(repo), repo }
+    const associateRepo: AmazonAssociateRepository = {
+      get: vi.fn(async () => associate),
+      save: vi.fn(),
+      clear: vi.fn(),
+      getAmazonDomains: vi.fn(() => AmazonAssociate.AMAZON_DOMAINS),
+    }
+    return { share: new Share(repo, associateRepo), repo, associateRepo }
   }
 
   describe('test()', () => {
@@ -103,7 +115,7 @@ describe('Share sub-command', () => {
     })
 
     it('uses the post template prefix when no user input is provided', async () => {
-      const { share } = buildShare('PRE: ')
+      const { share } = buildShare({ prefix: 'PRE: ' })
       const chrome = createFakeChromeDelegate({
         currentPage: async () =>
           ({
@@ -125,7 +137,7 @@ describe('Share sub-command', () => {
     })
 
     it('uses the user input as the lead line when provided', async () => {
-      const { share } = buildShare('PRE: ')
+      const { share } = buildShare({ prefix: 'PRE: ' })
       const chrome = createFakeChromeDelegate({
         currentPage: async () =>
           ({
@@ -138,6 +150,58 @@ describe('Share sub-command', () => {
 
       expect(payload.message.startsWith('my comment\n')).toBe(true)
       expect(payload.message).not.toMatch(/^PRE: /)
+    })
+
+    it('rewrites Amazon product URLs in both the message and the link meta', async () => {
+      const { share } = buildShare({
+        associate: new AmazonAssociate('www.amazon.co.jp', 'my-tag-22'),
+      })
+      const chrome = createFakeChromeDelegate({
+        currentPage: async () =>
+          ({
+            url: 'https://www.amazon.co.jp/some-name/dp/B0DXXXXXX1/ref=foo',
+            title: 'Some Product',
+          }) as chrome.tabs.Tab,
+      })
+
+      const payload = await share.buildShareMessage(':share', chrome)
+
+      const expected = 'https://www.amazon.co.jp/dp/B0DXXXXXX1/?tag=my-tag-22'
+      expect(payload.message).toContain(expected)
+      expect(payload.meta?.uri).toBe(expected)
+    })
+
+    it('leaves the URL untouched when the configured Amazon domain differs', async () => {
+      const { share } = buildShare({
+        associate: new AmazonAssociate('www.amazon.co.jp', 'my-tag-22'),
+      })
+      const chrome = createFakeChromeDelegate({
+        currentPage: async () =>
+          ({
+            url: 'https://www.amazon.com/dp/B0DXXXXXX1/',
+            title: 'Some Product',
+          }) as chrome.tabs.Tab,
+      })
+
+      const payload = await share.buildShareMessage(':share', chrome)
+
+      expect(payload.message).toContain('https://www.amazon.com/dp/B0DXXXXXX1/')
+      expect(payload.meta?.uri).toBe('https://www.amazon.com/dp/B0DXXXXXX1/')
+    })
+
+    it('leaves the URL untouched when no associate is configured', async () => {
+      const { share } = buildShare()
+      const chrome = createFakeChromeDelegate({
+        currentPage: async () =>
+          ({
+            url: 'https://www.amazon.co.jp/dp/B0DXXXXXX1/',
+            title: 'Some Product',
+          }) as chrome.tabs.Tab,
+      })
+
+      const payload = await share.buildShareMessage(':share', chrome)
+
+      expect(payload.meta?.uri).toBe('https://www.amazon.co.jp/dp/B0DXXXXXX1/')
     })
   })
 
@@ -158,7 +222,7 @@ describe('Share sub-command', () => {
 
   describe('handleEnterEvent', () => {
     it('returns the same payload as buildShareMessage', async () => {
-      const { share } = buildShare('PRE: ')
+      const { share } = buildShare({ prefix: 'PRE: ' })
       const chrome = createFakeChromeDelegate({
         currentPage: async () =>
           ({

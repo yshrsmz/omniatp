@@ -10,6 +10,13 @@ export interface ConfigLocalGateway {
   shouldCopyToClipboardOnPost(): Promise<boolean>
   saveCopyToClipboardOnPost(value: boolean): Promise<void>
 
+  getAmazonAssociate(): Promise<{ domain: string; associateId: string }>
+  saveAmazonAssociate(value: {
+    domain: string
+    associateId: string
+  }): Promise<void>
+  clearAmazonAssociate(): Promise<void>
+
   saveSession(session: AtpSessionData): Promise<void>
   getSession(): Promise<AtpSessionData | undefined>
   clearSession(): Promise<void>
@@ -48,6 +55,33 @@ export class DefaultConfigLocalGateway implements ConfigLocalGateway {
 
   async saveCopyToClipboardOnPost(value: boolean): Promise<void> {
     await this.storage.save({ copyToClipboardOnPost: value })
+  }
+
+  async getAmazonAssociate(): Promise<{
+    domain: string
+    associateId: string
+  }> {
+    const { amazonAssociateDomain, amazonAssociateId } = await this.storage.get(
+      {
+        amazonAssociateDomain: '',
+        amazonAssociateId: '',
+      }
+    )
+    return { domain: amazonAssociateDomain, associateId: amazonAssociateId }
+  }
+
+  async saveAmazonAssociate(value: {
+    domain: string
+    associateId: string
+  }): Promise<void> {
+    await this.storage.save({
+      amazonAssociateDomain: value.domain,
+      amazonAssociateId: value.associateId,
+    })
+  }
+
+  async clearAmazonAssociate(): Promise<void> {
+    await this.storage.remove(['amazonAssociateDomain', 'amazonAssociateId'])
   }
 
   async saveSession(session: AtpSessionData): Promise<void> {
