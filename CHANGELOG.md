@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.0.5](https://github.com/yshrsmz/omniatp/compare/v0.0.4...v0.0.5) (2026-05-08)
+
+
+### Features
+
+* **options:** link to privacy policy from the Others section ([18334cb](https://github.com/yshrsmz/omniatp/commit/18334cbef5d226474cf8d61a1e7f97e29d444851))
+* **options:** merge App Version row into Changelog item ([#100](https://github.com/yshrsmz/omniatp/issues/100)) ([1d0e499](https://github.com/yshrsmz/omniatp/commit/1d0e4992a5d252711e58296cf62361cfd8e81339))
+* **options:** show changelog in options page ([#97](https://github.com/yshrsmz/omniatp/issues/97)) ([14af144](https://github.com/yshrsmz/omniatp/commit/14af144db74ff8d07d779d09f97c33d9d68be4b9))
+
+
+### Bug Fixes
+
+* **logging:** redact session tokens and credentials from logs ([a8910bf](https://github.com/yshrsmz/omniatp/commit/a8910bf6bfdf19792287333c66922555007660e8))
+
 ## [0.0.4](https://github.com/yshrsmz/omniatp/compare/v0.0.3...v0.0.4) (2026-05-08)
 
 
