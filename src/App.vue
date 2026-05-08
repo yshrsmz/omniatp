@@ -7,12 +7,15 @@ import { AppBskyActorDefs } from '@atproto/api'
 import { AuthProgress } from './data/model/AuthProgress'
 import { AppConfig, BskyConfig } from './Configs'
 import { PostTemplate } from './data/model/PostTemplate'
+import { AmazonAssociate } from './data/model/AmazonAssociate'
 import { LoginCredential } from './data/model/LoginCredential'
 
 const component = createOptionsComponent(chrome)
 
 const _postTemplate = ref<PostTemplate>(PostTemplate.empty())
 const _copyToClipboardOnPost = ref<boolean>(false)
+const _amazonAssociate = ref<AmazonAssociate>(AmazonAssociate.empty())
+const amazonDomains = component.amazonAssociateRepository().getAmazonDomains()
 
 const service = BskyConfig.service
 const appVersion = component.chromeDelegate().appVersion()
@@ -41,6 +44,14 @@ const copyToClipboardOnPost = computed<boolean>({
   },
 })
 
+const amazonAssociate = computed<AmazonAssociate>({
+  get: () => _amazonAssociate.value,
+  set: (value) => {
+    _amazonAssociate.value = value
+    component.amazonAssociateRepository().save(value)
+  },
+})
+
 const handleSignIn = async (value: LoginCredential) => {
   authProgress.value = AuthProgress.IN_PROGRESS()
   try {
@@ -66,10 +77,11 @@ onMounted(async () => {
   const repo = component.bskyRepository()
   await repo.resumeSession()
 
-  const [p, template, copyOnPost] = await Promise.all([
+  const [p, template, copyOnPost, associate] = await Promise.all([
     repo.getProfile(),
     component.postTemplateRepository().get(),
     component.appPreferencesRepository().shouldCopyToClipboardOnPost(),
+    component.amazonAssociateRepository().get(),
   ])
 
   console.log('profile', p)
@@ -79,6 +91,7 @@ onMounted(async () => {
     : AuthProgress.UNAUTHORIZED()
   _postTemplate.value = template
   _copyToClipboardOnPost.value = copyOnPost
+  _amazonAssociate.value = associate
 })
 </script>
 
@@ -91,9 +104,11 @@ onMounted(async () => {
       <SettingsList
         v-model:post-template="postTemplate"
         v-model:copy-to-clipboard-on-post="copyToClipboardOnPost"
+        v-model:amazon-associate="amazonAssociate"
         v-model:auth-progress="authProgress"
         class="w-full"
         :service="service"
+        :amazon-domains="amazonDomains"
         :app-version="appVersion"
         :developer="developer"
         :store-url="storeUrl"

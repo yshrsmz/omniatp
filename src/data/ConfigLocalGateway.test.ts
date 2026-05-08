@@ -50,6 +50,41 @@ describe('DefaultConfigLocalGateway', () => {
     })
   })
 
+  describe('amazon associate', () => {
+    it('returns empty strings by default', async () => {
+      const gateway = buildGateway()
+      expect(await gateway.getAmazonAssociate()).toEqual({
+        domain: '',
+        associateId: '',
+      })
+    })
+
+    it('round-trips the saved value', async () => {
+      const gateway = buildGateway()
+      await gateway.saveAmazonAssociate({
+        domain: 'www.amazon.co.jp',
+        associateId: 'my-tag-22',
+      })
+      expect(await gateway.getAmazonAssociate()).toEqual({
+        domain: 'www.amazon.co.jp',
+        associateId: 'my-tag-22',
+      })
+    })
+
+    it('clears both keys', async () => {
+      const gateway = buildGateway()
+      await gateway.saveAmazonAssociate({
+        domain: 'www.amazon.co.jp',
+        associateId: 'my-tag-22',
+      })
+      await gateway.clearAmazonAssociate()
+      expect(await gateway.getAmazonAssociate()).toEqual({
+        domain: '',
+        associateId: '',
+      })
+    })
+  })
+
   describe('session', () => {
     it('returns undefined when no session is saved', async () => {
       const gateway = buildGateway()

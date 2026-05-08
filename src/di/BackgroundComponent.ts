@@ -26,6 +26,9 @@ export class DefaultBackgroundComponent implements BackgroundComponent {
         new Share(
           this.dataModule.postTemplateRepository(
             this.platformModule.storageDelegate()
+          ),
+          this.dataModule.amazonAssociateRepository(
+            this.platformModule.storageDelegate()
           )
         ),
       ],
