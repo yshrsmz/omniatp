@@ -44,6 +44,16 @@ export interface Changelog {
   releases: ChangelogRelease[]
 }
 
+/**
+ * A typed segment within an item description after inline-markdown parsing.
+ * Used by the renderer to apply `<code>` / `<strong>` styling to the
+ * appropriate ranges instead of leaking raw `` ` `` / `**` characters.
+ */
+export type InlineToken =
+  | { type: 'text'; text: string }
+  | { type: 'code'; text: string }
+  | { type: 'bold'; text: string }
+
 const RELEASE_HEADING_RE =
   /^##\s+(?:\[(?<linkVersion>[^\]]+)\]\((?<url>[^)]+)\)|(?<bareVersion>[^\s(]+))(?:\s+\((?<date>[^)]+)\))?\s*$/
 const SECTION_HEADING_RE = /^###\s+(?<title>.+?)\s*$/
@@ -74,6 +84,56 @@ const parseItem = (raw: string): ChangelogItem => {
     description: rest.trim(),
     links,
   }
+}
+
+/**
+ * Parses inline markdown formatting within an item description. Recognises
+ * `` `code` `` spans and `**bold**` spans only — no nesting, no italic, no
+ * inline links. The first delimiter encountered wins; an unmatched opener is
+ * left as plain text. This deliberately stays narrow because release-please's
+ * descriptions only use these two inline forms in practice.
+ */
+export const parseInline = (raw: string): InlineToken[] => {
+  const tokens: InlineToken[] = []
+  let i = 0
+  let textStart = 0
+
+  const flushText = (end: number) => {
+    if (end > textStart) {
+      tokens.push({ type: 'text', text: raw.slice(textStart, end) })
+    }
+  }
+
+  while (i < raw.length) {
+    if (raw[i] === '`') {
+      const close = raw.indexOf('`', i + 1)
+      if (close === -1) {
+        i++
+        continue
+      }
+      flushText(i)
+      tokens.push({ type: 'code', text: raw.slice(i + 1, close) })
+      i = close + 1
+      textStart = i
+      continue
+    }
+    if (raw[i] === '*' && raw[i + 1] === '*') {
+      const close = raw.indexOf('**', i + 2)
+      if (close === -1) {
+        i++
+        continue
+      }
+      flushText(i)
+      tokens.push({ type: 'bold', text: raw.slice(i + 2, close) })
+      i = close + 2
+      textStart = i
+      continue
+    }
+    i++
+  }
+
+  flushText(raw.length)
+  return tokens
 }
 
 /**

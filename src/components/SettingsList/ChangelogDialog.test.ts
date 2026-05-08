@@ -72,4 +72,38 @@ describe('ChangelogDialog', () => {
     await closeButton.trigger('click')
     expect(wrapper.emitted('update:show')?.[0]).toEqual([false])
   })
+
+  it('renders inline code and bold markdown inside item descriptions', () => {
+    const changelog: Changelog = {
+      releases: [
+        {
+          version: '0.1.0',
+          versionUrl: undefined,
+          date: '2026-05-08',
+          sections: [
+            {
+              title: 'Features',
+              items: [
+                {
+                  scope: undefined,
+                  description:
+                    'use `Property<String>` and the **important** flag',
+                  links: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+    const wrapper = mountDialog(changelog)
+    const codeEl = wrapper.find('code')
+    expect(codeEl.exists()).toBe(true)
+    expect(codeEl.text()).toBe('Property<String>')
+    const boldEls = wrapper.findAll('strong')
+    const importantBold = boldEls.find((el) => el.text() === 'important')
+    expect(importantBold?.exists()).toBe(true)
+    expect(wrapper.text()).not.toContain('`Property<String>`')
+    expect(wrapper.text()).not.toContain('**important**')
+  })
 })

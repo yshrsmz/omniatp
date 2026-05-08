@@ -6,7 +6,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/vue'
-import type { Changelog } from '../../data/model/Changelog'
+import { parseInline, type Changelog } from '../../data/model/Changelog'
 
 defineProps<{
   show: boolean
@@ -114,9 +114,26 @@ const handleClose = () => {
                             <strong v-if="item.scope" class="font-semibold"
                               >{{ item.scope }}:</strong
                             >
-                            <span :class="{ 'ml-1': item.scope }">{{
-                              item.description
-                            }}</span>
+                            <span :class="{ 'ml-1': item.scope }">
+                              <template
+                                v-for="(token, tokenIndex) in parseInline(
+                                  item.description
+                                )"
+                                :key="`tok-${tokenIndex}`"
+                              >
+                                <code
+                                  v-if="token.type === 'code'"
+                                  class="rounded bg-gray-100 px-1 font-mono text-xs"
+                                  >{{ token.text }}</code
+                                >
+                                <strong
+                                  v-else-if="token.type === 'bold'"
+                                  class="font-semibold"
+                                  >{{ token.text }}</strong
+                                >
+                                <template v-else>{{ token.text }}</template>
+                              </template>
+                            </span>
                             <template
                               v-for="link in item.links"
                               :key="link.url"

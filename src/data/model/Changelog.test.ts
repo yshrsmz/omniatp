@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseChangelog } from './Changelog'
+import { parseChangelog, parseInline } from './Changelog'
 
 describe('parseChangelog', () => {
   it('returns no releases for an empty changelog', () => {
@@ -180,5 +180,66 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     expect(refactor.links).toEqual([
       { text: '5d479eb', url: 'https://example.com/c5d4' },
     ])
+  })
+})
+
+describe('parseInline', () => {
+  it('returns a single text token for plain prose', () => {
+    expect(parseInline('initial release')).toEqual([
+      { type: 'text', text: 'initial release' },
+    ])
+  })
+
+  it('returns an empty array for an empty string', () => {
+    expect(parseInline('')).toEqual([])
+  })
+
+  it('extracts a single code span', () => {
+    expect(parseInline('use `Property<String>` here')).toEqual([
+      { type: 'text', text: 'use ' },
+      { type: 'code', text: 'Property<String>' },
+      { type: 'text', text: ' here' },
+    ])
+  })
+
+  it('extracts a single bold span', () => {
+    expect(parseInline('the **important** thing')).toEqual([
+      { type: 'text', text: 'the ' },
+      { type: 'bold', text: 'important' },
+      { type: 'text', text: ' thing' },
+    ])
+  })
+
+  it('extracts multiple code spans intermixed with text', () => {
+    expect(parseInline('`Foo` fields are now `Property<String>`')).toEqual([
+      { type: 'code', text: 'Foo' },
+      { type: 'text', text: ' fields are now ' },
+      { type: 'code', text: 'Property<String>' },
+    ])
+  })
+
+  it('treats an unmatched backtick as plain text', () => {
+    expect(parseInline('half open `code')).toEqual([
+      { type: 'text', text: 'half open `code' },
+    ])
+  })
+
+  it('treats an unmatched ** as plain text', () => {
+    expect(parseInline('half open **bold')).toEqual([
+      { type: 'text', text: 'half open **bold' },
+    ])
+  })
+
+  it('does not recurse into nested formatting', () => {
+    expect(parseInline('**bold with `code` inside**')).toEqual([
+      { type: 'bold', text: 'bold with `code` inside' },
+    ])
+    expect(parseInline('`code with **stars** inside`')).toEqual([
+      { type: 'code', text: 'code with **stars** inside' },
+    ])
+  })
+
+  it('handles a single * by leaving it as text', () => {
+    expect(parseInline('a*b*c')).toEqual([{ type: 'text', text: 'a*b*c' }])
   })
 })
