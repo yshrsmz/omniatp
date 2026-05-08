@@ -11,15 +11,12 @@ export class PostTemplate {
 
     const rt = new RichText({ text: baseResult })
 
-    let result = ''
     if (rt.graphemeLength <= BskyConfig.maxPostLength) {
-      result = baseResult
-    } else {
-      const diff = BskyConfig.maxPostLength - rt.graphemeLength
-      result = `${baseMessage.slice(0, diff)}\n${url}`
+      return baseResult
     }
 
-    return result
+    const diff = BskyConfig.maxPostLength - rt.graphemeLength
+    return `${baseMessage.slice(0, diff)}\n${url}`
   }
 
   public static empty(): PostTemplate {
