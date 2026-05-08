@@ -13,6 +13,7 @@ import { ConfigLocalGateway } from './ConfigLocalGateway'
 import { LinkMeta } from './model/LinkMeta'
 import { BskyConfig } from '../Configs'
 import { Logger } from '../Logger'
+import { redactForLogging } from './redact'
 
 export interface BskyRepository {
   signIn(credential: LoginCredential): Promise<void>
@@ -44,7 +45,7 @@ export class DefaultBskyRepository implements BskyRepository {
     this.agent = agentFactory({
       service: BskyConfig.service,
       persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
-        this.logger.log('persistSession', event, session)
+        this.logger.log('persistSession', event, redactForLogging(session))
         if (session && event !== 'create') {
           this.saveSessionIfNeeded(session)
           return
@@ -79,7 +80,11 @@ export class DefaultBskyRepository implements BskyRepository {
       shouldSave = !!session
     }
 
-    this.logger.log('saveSessionIfNeeded:', shouldSave, session)
+    this.logger.log(
+      'saveSessionIfNeeded:',
+      shouldSave,
+      redactForLogging(session)
+    )
     if (shouldSave && session) {
       await this.localGateway.saveSession(session)
     }
@@ -91,7 +96,7 @@ export class DefaultBskyRepository implements BskyRepository {
       password: credential.password,
     })
 
-    this.logger.log('login', res)
+    this.logger.log('login', redactForLogging(res))
     // credential should already be saved via persistSession callback,
     // but should be saved here as well so that subsequent call can safely access bsky API
     if (res.success && res.data) {
@@ -112,7 +117,7 @@ export class DefaultBskyRepository implements BskyRepository {
     const session = await this.localGateway.getSession()
     if (session) {
       const res = await this.agent.resumeSession(session)
-      this.logger.log('resumeSession', res)
+      this.logger.log('resumeSession', redactForLogging(res))
     }
   }
 
@@ -137,7 +142,7 @@ export class DefaultBskyRepository implements BskyRepository {
     AppBskyActorDefs.ProfileViewDetailed | undefined
   > {
     const session = await this.localGateway.getSession()
-    this.logger.log('getProfile', session)
+    this.logger.log('getProfile', redactForLogging(session))
     if (session) {
       const res = await this.agent.getProfile({ actor: session.did })
       return res.data

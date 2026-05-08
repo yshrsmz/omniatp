@@ -1,6 +1,7 @@
 import { AtpSessionData } from '@atproto/api'
 import { ChromeStorageDelegate } from '../platform/ChromeStorageDelegate'
 import { Logger } from '../Logger'
+import { redactForLogging } from './redact'
 
 export interface ConfigLocalGateway {
   getPostPrefix(): Promise<string>
@@ -85,7 +86,7 @@ export class DefaultConfigLocalGateway implements ConfigLocalGateway {
   }
 
   async saveSession(session: AtpSessionData): Promise<void> {
-    this.logger.log('saveSession', session)
+    this.logger.log('saveSession', redactForLogging(session))
     return this.storage.save({ session })
   }
 
