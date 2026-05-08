@@ -69,7 +69,7 @@ const handleUpdateAmazonAssociateId = (id: string) => {
 </script>
 
 <template>
-  <div class="SettingsList overflow-hidden rounded-md bg-white shadow">
+  <div class="SettingsList overflow-hidden rounded-md bg-white shadow-sm">
     <ul role="list">
       <SettingsListHeader title="Auth" />
       <AuthItem

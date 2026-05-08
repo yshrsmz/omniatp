@@ -35,7 +35,7 @@ const options = computed(() => [PLACEHOLDER, ...props.amazonDomains])
       <Listbox v-model="selected" class="mt-1 w-72">
         <div class="relative">
           <ListboxButton
-            class="relative w-full cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left text-gray-900 shadow ring-1 ring-inset ring-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            class="relative w-full cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             <span class="block truncate">{{ selected }}</span>
             <span
@@ -53,7 +53,7 @@ const options = computed(() => [PLACEHOLDER, ...props.amazonDomains])
             leave-to-class="opacity-0"
           >
             <ListboxOptions
-              class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none"
+              class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-hidden"
             >
               <ListboxOption
                 v-for="option in options"
