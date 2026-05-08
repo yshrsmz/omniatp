@@ -5,8 +5,11 @@ import ChangelogDialog from './ChangelogDialog.vue'
 import changelogSource from '../../../CHANGELOG.md?raw'
 import { parseChangelog } from '../../data/model/Changelog'
 
+defineProps<{
+  appVersion: string
+}>()
+
 const changelog = parseChangelog(changelogSource)
-const latestVersion = changelog.releases[0]?.version
 
 const showDialog = ref(false)
 
@@ -21,10 +24,8 @@ const handleClick = () => {
     inner-class="w-full text-left"
     @click="handleClick"
   >
-    <p>Changelog</p>
-    <template v-if="latestVersion" #subtext
-      >Latest: {{ latestVersion }}</template
-    >
+    <p>App Version: {{ appVersion }}</p>
+    <template #subtext>Click to read changelog</template>
   </SettingsListItem>
   <ChangelogDialog
     v-if="showDialog"
