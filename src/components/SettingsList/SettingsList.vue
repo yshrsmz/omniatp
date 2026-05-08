@@ -24,6 +24,7 @@ const props = defineProps<{
   amazonDomains: readonly string[]
   appVersion: string
   developer: Developer
+  privacyPolicyUrl: string
   storeUrl: string
   authProgress: AuthProgress
 }>()
@@ -108,6 +109,14 @@ const handleUpdateAmazonAssociateId = (id: string) => {
       </SettingsListItem>
       <SettingsListItem as="a" :href="storeUrl" target="_blank">
         <p>Rate on Chrome Web Store</p>
+      </SettingsListItem>
+      <SettingsListItem
+        as="a"
+        :href="privacyPolicyUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <p>Privacy Policy</p>
       </SettingsListItem>
     </ul>
   </div>

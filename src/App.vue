@@ -20,6 +20,7 @@ const amazonDomains = component.amazonAssociateRepository().getAmazonDomains()
 const service = BskyConfig.service
 const appVersion = component.chromeDelegate().appVersion()
 const developer = AppConfig.developer
+const privacyPolicyUrl = AppConfig.privacyPolicyUrl
 const storeUrl = component.chromeDelegate().storeUrl()
 
 const isAuthorized = ref<boolean>(false)
@@ -111,6 +112,7 @@ onMounted(async () => {
         :amazon-domains="amazonDomains"
         :app-version="appVersion"
         :developer="developer"
+        :privacy-policy-url="privacyPolicyUrl"
         :store-url="storeUrl"
         :is-authorized="isAuthorized"
         :profile="profile"

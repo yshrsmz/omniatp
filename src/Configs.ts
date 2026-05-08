@@ -10,4 +10,6 @@ export const AppConfig = {
     name: '@codingfeline.com',
     url: 'https://bsky.app/profile/codingfeline.com',
   } satisfies Developer,
+  privacyPolicyUrl:
+    'https://www.codingfeline.com/products/omniatp/privacy-policy/',
 }
