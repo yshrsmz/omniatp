@@ -99,8 +99,12 @@ export class DefaultChromeDelegate implements ChromeDelegate {
       throw new Error('chrome.offscreen API is not available')
     }
 
+    // After a service-worker restart, hasDocument() may still report an
+    // offscreen document from the previous session whose onMessage listener
+    // is no longer registered — sendMessage() then silently has no receiver.
+    // Always recreate so the listener is fresh.
     if (await offscreen.hasDocument()) {
-      return
+      await offscreen.closeDocument()
     }
 
     await offscreen.createDocument({
