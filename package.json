@@ -14,6 +14,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint --fix . && prettier -w ."
   },
   "dependencies": {
