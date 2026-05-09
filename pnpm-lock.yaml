@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@atproto/api':
-        specifier: 0.19.12
-        version: 0.19.12
+        specifier: 0.19.13
+        version: 0.19.13
       '@atproto/xrpc':
         specifier: 0.7.7
         version: 0.7.7
@@ -130,8 +130,8 @@ packages:
   '@asamuzakjp/nwsapi@2.3.9':
     resolution: {integrity: sha512-n8GuYSrI9bF7FFZ/SjhwevlHc8xaVlb/7HmHelnc/PZXBD2ZR49NnN9sMMuDdEGPeeRQ5d0hqlSlEpgCX3Wl0Q==}
 
-  '@atproto/api@0.19.12':
-    resolution: {integrity: sha512-5CxDPBPxWx30ZM0UwjsmY67l+Kl8lTiLnH/8QvymsuJuRwA47CVfqo+QzEwJSkojNm7s0mTp7Ln2mR+OcFGBuw==}
+  '@atproto/api@0.19.13':
+    resolution: {integrity: sha512-1/LVbETVQTJFYv3Oa2Px1B/uFCRAwU0cRaoEDqdABgLHMKcWLlYJR1f9IyMdJ2JyLxcRviz6vViJI2BB8D0jcQ==}
 
   '@atproto/common-web@0.4.21':
     resolution: {integrity: sha512-Odq+wdk3YNasGCjjlpl3bCIPvqYHige5DLfMkIffNv/2PI/iIj5ZvAvMvJlJ59OhReKSxtpI0invx5UQPc3+fw==}
@@ -2904,7 +2904,7 @@ snapshots:
 
   '@asamuzakjp/nwsapi@2.3.9': {}
 
-  '@atproto/api@0.19.12':
+  '@atproto/api@0.19.13':
     dependencies:
       '@atproto/common-web': 0.4.21
       '@atproto/lexicon': 0.6.2
