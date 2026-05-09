@@ -192,6 +192,19 @@ describe('OmniATP.postStatus', () => {
     )
   })
 
+  it('still copies to clipboard when createPost throws but the preference is enabled', async () => {
+    const bsky = buildBskyRepository({
+      createPost: vi.fn(async () => {
+        throw new Error('post fail')
+      }),
+    })
+    const { omni, chrome } = buildOmni({ bsky, prefs: buildAppPrefs(true) })
+
+    await omni.postStatus({ message: 'retry me' })
+
+    expect(chrome.copyToClipboard).toHaveBeenCalledWith('retry me')
+  })
+
   it('shows an error notification when createPost throws a generic error', async () => {
     const bsky = buildBskyRepository({
       createPost: vi.fn(async () => {
@@ -207,6 +220,13 @@ describe('OmniATP.postStatus', () => {
       'Oops! there was an error: undefined',
       'something broke'
     )
+  })
+
+  it('logs on successful post', async () => {
+    const logger = createFakeLogger()
+    const { omni } = buildOmni({ logger })
+    await omni.postStatus({ message: 'hello' })
+    expect(logger.log).toHaveBeenCalledWith('Posted', 'hello')
   })
 
   it('logs the payload before posting', async () => {

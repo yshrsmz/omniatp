@@ -6,6 +6,8 @@ import { Payload, SubCommand } from './SubCommands'
 import { XRPCError } from '@atproto/xrpc'
 import { Logger } from '../Logger'
 
+const NOTIFICATION_ICON = 'icon/128.png'
+
 const extractError = (
   e: unknown
 ): { status: number | undefined; error: string | undefined } => {
@@ -52,31 +54,41 @@ export class OmniATP {
       return
     }
 
+    this.logger.log('postStatus', payload)
+
+    await Promise.all([
+      this.submitPost(payload),
+      this.maybeCopyToClipboard(payload),
+    ])
+  }
+
+  private async submitPost(payload: Payload): Promise<void> {
     try {
-      this.logger.log('postStatus', payload)
-
       await this.bskyRepository.createPost(payload.message, payload.meta)
-
+      this.logger.log('Posted', payload.message)
       this.chrome.createNotification(
-        'icon/128.png',
+        NOTIFICATION_ICON,
         this.chrome.appName(),
         payload.message
       )
-
-      if (await this.appPreferencesRepository.shouldCopyToClipboardOnPost()) {
-        try {
-          await this.chrome.copyToClipboard(payload.message)
-        } catch (clipboardError) {
-          this.logger.error('Failed to copy to clipboard', clipboardError)
-        }
-      }
     } catch (e) {
       const { status, error } = extractError(e)
       this.chrome.createNotification(
-        'icon/128.png',
+        NOTIFICATION_ICON,
         `Oops! there was an error: ${status}`,
         error ?? 'Unknown error'
       )
+    }
+  }
+
+  private async maybeCopyToClipboard(payload: Payload): Promise<void> {
+    try {
+      if (await this.appPreferencesRepository.shouldCopyToClipboardOnPost()) {
+        await this.chrome.copyToClipboard(payload.message)
+        this.logger.log('Copied to clipboard', payload.message)
+      }
+    } catch (clipboardError) {
+      this.logger.error('Failed to copy to clipboard', clipboardError)
     }
   }
 
