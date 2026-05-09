@@ -42,7 +42,7 @@ const handleClose = () => {
       >
         Changelog
       </DialogTitle>
-      <div class="mt-4 px-6 overflow-y-auto flex-1">
+      <div class="my-4 px-6 overflow-y-auto flex-1">
         <p v-if="changelog.releases.length === 0" class="text-sm text-gray-500">
           No releases yet.
         </p>
