@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.6](https://github.com/yshrsmz/omniatp/compare/v0.0.5...v0.0.6) (2026-05-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @atproto/api to v0.19.13 ([#102](https://github.com/yshrsmz/omniatp/issues/102)) ([4532d4b](https://github.com/yshrsmz/omniatp/commit/4532d4b1753044c5bf36f35ebbcfed0d228b4b9f))
+* **deps:** update npm runtime dependencies (non-major) ([#109](https://github.com/yshrsmz/omniatp/issues/109)) ([58705c0](https://github.com/yshrsmz/omniatp/commit/58705c032a372cd8a4ca97b76c48d09e775c8761))
+* **options:** balance vertical padding in Changelog dialog scroll area ([#107](https://github.com/yshrsmz/omniatp/issues/107)) ([9d0c6d2](https://github.com/yshrsmz/omniatp/commit/9d0c6d252065367c0f8cecf7b5c6ba40f777b4b6))
+
 ## [0.0.5](https://github.com/yshrsmz/omniatp/compare/v0.0.4...v0.0.5) (2026-05-08)
 
 
