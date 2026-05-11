@@ -31,7 +31,7 @@
     "@eslint/js": "10.0.1",
     "@tailwindcss/forms": "0.5.11",
     "@tailwindcss/vite": "4.2.4",
-    "@types/chrome": "0.1.40",
+    "@types/chrome": "0.1.42",
     "@vitejs/plugin-vue": "6.0.6",
     "@vitest/coverage-v8": "4.1.5",
     "@vue/test-utils": "2.4.10",
