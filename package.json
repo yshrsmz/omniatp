@@ -30,10 +30,10 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@tailwindcss/forms": "0.5.11",
-    "@tailwindcss/vite": "4.2.4",
+    "@tailwindcss/vite": "4.3.0",
     "@types/chrome": "0.1.42",
     "@vitejs/plugin-vue": "6.0.6",
-    "@vitest/coverage-v8": "4.1.5",
+    "@vitest/coverage-v8": "4.1.6",
     "@vue/test-utils": "2.4.10",
     "@wxt-dev/module-vue": "1.0.3",
     "eslint": "10.3.0",
@@ -44,12 +44,12 @@
     "lefthook": "2.1.6",
     "postcss": "8.5.14",
     "prettier": "3.8.3",
-    "tailwindcss": "4.2.4",
+    "tailwindcss": "4.3.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.59.2",
-    "vitest": "4.1.5",
+    "typescript-eslint": "8.59.3",
+    "vitest": "4.1.6",
     "vue-eslint-parser": "10.4.0",
-    "wxt": "0.20.25"
+    "wxt": "0.20.26"
   },
   "packageManager": "pnpm@11.0.9"
 }
