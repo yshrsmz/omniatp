@@ -18,12 +18,12 @@
     "lint:fix": "eslint --fix . && prettier -w ."
   },
   "dependencies": {
-    "@atproto/api": "0.19.18",
+    "@atproto/api": "0.19.19",
     "@atproto/xrpc": "0.7.7",
     "@headlessui/vue": "1.7.23",
     "@heroicons/vue": "2.2.0",
     "consola": "3.4.2",
-    "date-fns": "4.1.0",
+    "date-fns": "4.2.1",
     "vest": "6.3.2",
     "vue": "3.5.34"
   },
