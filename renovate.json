@@ -1,50 +1,10 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:best-practices",
-    ":pinDependencies",
-    ":pinDevDependencies",
-    ":semanticCommits"
+    "github>yshrsmz/renovate-config",
+    "github>yshrsmz/renovate-config:npm",
+    "github>yshrsmz/renovate-config:github-actions",
+    "github>yshrsmz/renovate-config:tooling"
   ],
-  "reviewers": ["yshrsmz"],
-  "lockFileMaintenance": {
-    "enabled": true
-  },
-  "dependencyDashboard": true,
-  "prConcurrentLimit": 3,
-  "packageRules": [
-    {
-      "matchManagers": ["npm"],
-      "matchDepTypes": ["dependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "npm runtime dependencies (non-major)",
-      "groupSlug": "npm-runtime-minor-patch",
-      "semanticCommitType": "fix"
-    },
-    {
-      "matchManagers": ["npm"],
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "npm dev dependencies (non-major)",
-      "groupSlug": "npm-dev-minor-patch",
-      "semanticCommitType": "chore"
-    },
-    {
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "github-actions non-major dependencies",
-      "groupSlug": "github-actions-minor-patch",
-      "semanticCommitType": "chore"
-    },
-    {
-      "matchManagers": ["mise"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "mise non-major dependencies",
-      "groupSlug": "mise-minor-patch",
-      "semanticCommitType": "chore"
-    },
-    {
-      "matchPackageNames": ["vite", "@vitejs{/,}**"],
-      "groupName": "vitejs"
-    }
-  ]
+  "prConcurrentLimit": 1
 }
