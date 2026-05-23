@@ -13,6 +13,7 @@ export const createFakeChromeDelegate = (
     openOptionsPage: vi.fn<ChromeDelegate['openOptionsPage']>(),
     createNotification: vi.fn<ChromeDelegate['createNotification']>(),
     copyToClipboard: vi.fn<ChromeDelegate['copyToClipboard']>(async () => {}),
+    prewarmOffscreen: vi.fn<ChromeDelegate['prewarmOffscreen']>(async () => {}),
     storeUrl: vi.fn<ChromeDelegate['storeUrl']>(
       () => 'https://chrome.google.com/webstore/detail/test'
     ),

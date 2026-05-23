@@ -156,6 +156,31 @@ describe('DefaultChromeDelegate.copyToClipboard', () => {
     expect(closeOrder).toBeLessThan(createOrder)
   })
 
+  it('creates and closes an offscreen during prewarm to warm the cache', async () => {
+    const stub = buildStubChrome()
+    const logger = createFakeLogger()
+    const delegate = new DefaultChromeDelegate(stub.chrome, logger)
+
+    await delegate.prewarmOffscreen()
+
+    expect(stub.createDocument).toHaveBeenCalledTimes(1)
+    expect(stub.closeDocument).toHaveBeenCalledTimes(1)
+    const createOrder = stub.createDocument.mock.invocationCallOrder[0]
+    const closeOrder = stub.closeDocument.mock.invocationCallOrder[0]
+    expect(createOrder).toBeLessThan(closeOrder)
+  })
+
+  it('skips prewarm when an offscreen document already exists', async () => {
+    const stub = buildStubChrome({ hasDocument: true })
+    const logger = createFakeLogger()
+    const delegate = new DefaultChromeDelegate(stub.chrome, logger)
+
+    await delegate.prewarmOffscreen()
+
+    expect(stub.createDocument).not.toHaveBeenCalled()
+    expect(stub.closeDocument).not.toHaveBeenCalled()
+  })
+
   it('throws when sendMessage reports failure', async () => {
     const stub = buildStubChrome({
       sendMessageResponse: { ok: false, error: 'boom' },

@@ -36,8 +36,8 @@ const ready: OffscreenReadyMessage = {
 void chrome.runtime.sendMessage(ready).catch(() => {})
 
 // Offscreen documents are never focused, so navigator.clipboard.writeText
-// throws "Document is not focused". The textarea + execCommand pattern is the
-// path Chrome officially supports for offscreen clipboard writes.
+// throws "Document is not focused". The textarea + execCommand pattern is
+// the path Chrome officially supports for offscreen clipboard writes.
 async function writeToClipboard(text: string): Promise<void> {
   const textarea =
     document.querySelector<HTMLTextAreaElement>('#clipboard-target')

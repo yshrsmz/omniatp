@@ -18,6 +18,7 @@ export interface ChromeDelegate {
   openOptionsPage(): void
   createNotification(iconUrl: string, title: string, message: string): void
   copyToClipboard(text: string): Promise<void>
+  prewarmOffscreen(): Promise<void>
   storeUrl(): string
   onStorageChanged(
     listener: (changes: { [key: string]: chrome.storage.StorageChange }) => void
@@ -85,6 +86,27 @@ export class DefaultChromeDelegate implements ChromeDelegate {
         }, 3000)
       }
     )
+  }
+
+  async prewarmOffscreen(): Promise<void> {
+    const offscreen = this.chrome.offscreen
+    if (!offscreen) return
+    try {
+      if (await offscreen.hasDocument()) return
+      // Create + close round-trip so the offscreen HTML and JS chunk land
+      // in disk cache / V8 code cache. The next user-initiated copy then
+      // pays a warm createDocument and stays within the ~5s transient
+      // activation window — without this, cold path execCommand('copy')
+      // silently no-ops because the user gesture has expired.
+      await offscreen.createDocument({
+        url: this.chrome.runtime.getURL('offscreen.html'),
+        reasons: [offscreen.Reason.CLIPBOARD],
+        justification: 'Pre-warm clipboard offscreen for fast first copy.',
+      })
+      await offscreen.closeDocument()
+    } catch (e) {
+      this.logger.warn('Pre-warm offscreen failed', e)
+    }
   }
 
   async copyToClipboard(text: string): Promise<void> {
