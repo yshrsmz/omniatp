@@ -34,7 +34,7 @@ export class DefaultPlatformModule implements PlatformModule {
   chromeDelegate(): ChromeDelegate {
     return getOrCreate(
       this._chromeDelegate,
-      () => new DefaultChromeDelegate(this.chrome),
+      () => new DefaultChromeDelegate(this.chrome, this.logger()),
       (v) => (this._chromeDelegate = v)
     )
   }

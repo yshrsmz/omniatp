@@ -1,6 +1,7 @@
 import {
   OFFSCREEN_CLIPBOARD_TARGET,
   OffscreenClipboardMessage,
+  OffscreenReadyMessage,
 } from '../../platform/offscreen-messages'
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
@@ -25,9 +26,18 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   return false
 })
 
+// Signal readiness AFTER the listener above is installed. Without this,
+// the SW can race ahead and send 'copy' before the listener exists when
+// the offscreen document is cold-loaded.
+const ready: OffscreenReadyMessage = {
+  target: OFFSCREEN_CLIPBOARD_TARGET,
+  type: 'ready',
+}
+void chrome.runtime.sendMessage(ready).catch(() => {})
+
 // Offscreen documents are never focused, so navigator.clipboard.writeText
-// throws "Document is not focused". The textarea + execCommand pattern is the
-// path Chrome officially supports for offscreen clipboard writes.
+// throws "Document is not focused". The textarea + execCommand pattern is
+// the path Chrome officially supports for offscreen clipboard writes.
 async function writeToClipboard(text: string): Promise<void> {
   const textarea =
     document.querySelector<HTMLTextAreaElement>('#clipboard-target')

@@ -1,11 +1,13 @@
 import { OmniATP } from '../background/OmniATP'
 import { Options, Share, SubCommand, Version } from '../background/SubCommands'
+import { ChromeDelegate } from '../platform/ChromeDelegate'
 import { DataModule } from './DataModule'
 import { PlatformModule } from './PlatformModule'
 import { getOrCreate } from './helper'
 
 export interface BackgroundComponent {
   omniatp(): OmniATP
+  chromeDelegate(): ChromeDelegate
 }
 
 export class DefaultBackgroundComponent implements BackgroundComponent {
@@ -34,6 +36,10 @@ export class DefaultBackgroundComponent implements BackgroundComponent {
       ],
       (v) => (this._subCommands = v)
     )
+  }
+
+  chromeDelegate(): ChromeDelegate {
+    return this.platformModule.chromeDelegate()
   }
 
   omniatp(): OmniATP {
