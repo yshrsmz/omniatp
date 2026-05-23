@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.7](https://github.com/yshrsmz/omniatp/compare/v0.0.6...v0.0.7) (2026-05-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @atproto/api to v0.19.15 ([#114](https://github.com/yshrsmz/omniatp/issues/114)) ([f30eb49](https://github.com/yshrsmz/omniatp/commit/f30eb4922fe5aa78e0e4f3267474bc5b5ba54075))
+* **deps:** update dependency @atproto/api to v0.19.16 ([#120](https://github.com/yshrsmz/omniatp/issues/120)) ([049f0fb](https://github.com/yshrsmz/omniatp/commit/049f0fb96d90e007377d0eb222871cd1fad46de8))
+* **deps:** update dependency @atproto/api to v0.19.18 ([#125](https://github.com/yshrsmz/omniatp/issues/125)) ([b2babf2](https://github.com/yshrsmz/omniatp/commit/b2babf263369b9539cde20c8c6b5c4edcef89d68))
+* **deps:** update npm dependencies ([#142](https://github.com/yshrsmz/omniatp/issues/142)) ([2a1bebb](https://github.com/yshrsmz/omniatp/commit/2a1bebbd6c2392f07f2e7f0a38c6fe9bae17ff66))
+* **deps:** update npm runtime dependencies (non-major) ([#136](https://github.com/yshrsmz/omniatp/issues/136)) ([1381d60](https://github.com/yshrsmz/omniatp/commit/1381d6033c6640b5fb952ade3324d4cb5f90c3d2))
+* stabilize first clipboard copy after long inactivity ([#141](https://github.com/yshrsmz/omniatp/issues/141)) ([d362492](https://github.com/yshrsmz/omniatp/commit/d362492cafe6a54cc13969fe652eb7fc8fe5b5b2))
+
 ## [0.0.6](https://github.com/yshrsmz/omniatp/compare/v0.0.5...v0.0.6) (2026-05-10)
 
 
