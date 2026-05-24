@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "yshrsmz-cc-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "yshrsmz/cc-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "meta@yshrsmz-cc-plugins": true
+  }
+}
