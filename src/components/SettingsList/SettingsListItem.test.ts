@@ -48,4 +48,34 @@ describe('SettingsListItem', () => {
     expect(inner.classes()).toContain('!flex')
     expect(inner.classes()).toContain('items-center')
   })
+
+  it('applies interactive affordance classes when rendered as a button', () => {
+    const wrapper = mount(SettingsListItem, {
+      props: { as: 'button' },
+      slots: { default: 'x' },
+    })
+    const button = wrapper.find('button')
+    expect(button.classes()).toContain('cursor-pointer')
+    expect(button.classes()).toContain('hover:bg-gray-50')
+  })
+
+  it('applies interactive affordance classes when rendered as an anchor', () => {
+    const wrapper = mount(SettingsListItem, {
+      props: { as: 'a' },
+      attrs: { href: 'https://example.com' },
+      slots: { default: 'x' },
+    })
+    const anchor = wrapper.find('a')
+    expect(anchor.classes()).toContain('cursor-pointer')
+    expect(anchor.classes()).toContain('hover:bg-gray-50')
+  })
+
+  it('does not apply interactive affordance classes for the default div', () => {
+    const wrapper = mount(SettingsListItem, {
+      slots: { default: 'x' },
+    })
+    const inner = wrapper.find('li > div')
+    expect(inner.classes()).not.toContain('cursor-pointer')
+    expect(inner.classes()).not.toContain('hover:bg-gray-50')
+  })
 })
