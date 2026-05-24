@@ -8,6 +8,7 @@
     }
   },
   "enabledPlugins": {
-    "meta@yshrsmz-cc-plugins": true
+    "meta@yshrsmz-cc-plugins": true,
+    "github@yshrsmz-cc-plugins": true
   }
 }
