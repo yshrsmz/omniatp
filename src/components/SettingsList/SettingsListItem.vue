@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed, defineComponent, useAttrs } from 'vue'
+import { computed } from 'vue'
+
+defineOptions({ inheritAttrs: false })
 
 const props = withDefaults(
   defineProps<{ as?: string; innerClass?: string }>(),
@@ -9,29 +11,14 @@ const props = withDefaults(
   }
 )
 
-const COMPONENT_NAME = 'SettingsListItem'
-
-const attrs = useAttrs()
-
-const excludedAttrs = computed(() => {
-  const { ['class']: c, ...excluded } = attrs
-  return excluded
-})
-
 const isInteractive = computed(() => props.as === 'button' || props.as === 'a')
 </script>
 
-<script lang="ts">
-export default defineComponent({
-  inheritAttrs: false,
-})
-</script>
-
 <template>
-  <li :class="[COMPONENT_NAME, $attrs.class]">
+  <li class="SettingsListItem">
     <component
       :is="as"
-      v-bind="excludedAttrs"
+      v-bind="$attrs"
       :class="[
         'block px-6 py-4 text-base',
         isInteractive

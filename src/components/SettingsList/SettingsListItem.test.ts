@@ -78,4 +78,22 @@ describe('SettingsListItem', () => {
     expect(inner.classes()).not.toContain('cursor-pointer')
     expect(inner.classes()).not.toContain('hover:bg-gray-50')
   })
+
+  it('forwards parent-provided class to the inner element, not the <li>', () => {
+    const wrapper = mount(SettingsListItem, {
+      props: { as: 'button' },
+      attrs: { class: 'bg-blue-500' },
+      slots: { default: 'x' },
+    })
+    const button = wrapper.find('button')
+    expect(button.classes()).toContain('bg-blue-500')
+    expect(wrapper.find('li').classes()).not.toContain('bg-blue-500')
+  })
+
+  it('keeps the SettingsListItem identifier class on the <li>', () => {
+    const wrapper = mount(SettingsListItem, {
+      slots: { default: 'x' },
+    })
+    expect(wrapper.find('li').classes()).toContain('SettingsListItem')
+  })
 })
