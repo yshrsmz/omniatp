@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { computed, defineComponent, useAttrs } from 'vue'
 
-withDefaults(defineProps<{ as?: string; innerClass?: string }>(), {
-  as: 'div',
-  innerClass: '',
-})
+const props = withDefaults(
+  defineProps<{ as?: string; innerClass?: string }>(),
+  {
+    as: 'div',
+    innerClass: '',
+  }
+)
 
 const COMPONENT_NAME = 'SettingsListItem'
 
@@ -14,6 +17,8 @@ const excludedAttrs = computed(() => {
   const { ['class']: c, ...excluded } = attrs
   return excluded
 })
+
+const isInteractive = computed(() => props.as === 'button' || props.as === 'a')
 </script>
 
 <script lang="ts">
@@ -27,7 +32,13 @@ export default defineComponent({
     <component
       :is="as"
       v-bind="excludedAttrs"
-      :class="['block px-6 py-4 text-base', innerClass]"
+      :class="[
+        'block px-6 py-4 text-base',
+        isInteractive
+          ? 'cursor-pointer hover:bg-gray-50 transition-colors'
+          : '',
+        innerClass,
+      ]"
     >
       <slot />
       <div v-if="$slots.subtext" class="text-gray-600 text-sm">

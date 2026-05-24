@@ -1,2 +1,9 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/forms";
+
+@layer base {
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+}
