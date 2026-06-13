@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.8](https://github.com/yshrsmz/omniatp/compare/v0.0.7...v0.0.8) (2026-06-13)
+
+
+### Bug Fixes
+
+* add pointer cursor and hover affordance to clickable settings ([#145](https://github.com/yshrsmz/omniatp/issues/145)) ([47836f2](https://github.com/yshrsmz/omniatp/commit/47836f2a312de2a307b605ad1cedf04be3bd039d))
+* **SettingsList:** drop dead `!border-t-0` on ChangelogItem ([#149](https://github.com/yshrsmz/omniatp/issues/149)) ([d6521da](https://github.com/yshrsmz/omniatp/commit/d6521da61af0a30d445863659c15f30d02c15544))
+
 ## [0.0.7](https://github.com/yshrsmz/omniatp/compare/v0.0.6...v0.0.7) (2026-05-23)
 
 
