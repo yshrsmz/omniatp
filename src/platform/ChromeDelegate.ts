@@ -118,8 +118,7 @@ export class DefaultChromeDelegate implements ChromeDelegate {
       text,
     }
     const response = (await this.chrome.runtime.sendMessage(message)) as
-      | OffscreenClipboardResponse
-      | undefined
+      OffscreenClipboardResponse | undefined
 
     if (!response?.ok) {
       throw new Error(response?.error ?? 'Clipboard copy failed')
