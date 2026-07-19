@@ -27,8 +27,4 @@ export const AuthProgress = {
 }
 
 export type AuthProgress =
-  | INITIALIZING
-  | UNAUTHORIZED
-  | IN_PROGRESS
-  | AUTHORIZED
-  | ERROR
+  INITIALIZING | UNAUTHORIZED | IN_PROGRESS | AUTHORIZED | ERROR
