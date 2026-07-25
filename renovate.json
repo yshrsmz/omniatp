@@ -1,5 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "reviewers": ["yshrsmz"],
   "extends": [
     "github>yshrsmz/renovate-config",
     "github>yshrsmz/renovate-config:npm",
