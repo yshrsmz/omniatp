@@ -1,5 +1,5 @@
 import { vi } from 'vitest'
-import { ChromeDelegate } from '../platform/ChromeDelegate'
+import type { ChromeDelegate } from '../platform/ChromeDelegate'
 
 export const createFakeChromeDelegate = (
   overrides: Partial<ChromeDelegate> = {}

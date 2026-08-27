@@ -1,10 +1,9 @@
-import { Chrome } from '../utils'
-import {
-  BackgroundComponent,
-  DefaultBackgroundComponent,
-} from './BackgroundComponent'
+import type { Chrome } from '../utils'
+import type { BackgroundComponent } from './BackgroundComponent'
+import { DefaultBackgroundComponent } from './BackgroundComponent'
 import { DefaultDataModule } from './DataModule'
-import { DefaultOptionsComponent, OptionsComponent } from './OptionsComponent'
+import type { OptionsComponent } from './OptionsComponent'
+import { DefaultOptionsComponent } from './OptionsComponent'
 import { DefaultPlatformModule } from './PlatformModule'
 
 export const createBackgroundComponent = (

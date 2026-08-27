@@ -1,8 +1,8 @@
-import {
-  OFFSCREEN_CLIPBOARD_TARGET,
+import type {
   OffscreenClipboardMessage,
   OffscreenReadyMessage,
 } from '../../platform/offscreen-messages'
+import { OFFSCREEN_CLIPBOARD_TARGET } from '../../platform/offscreen-messages'
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   const msg = message as Partial<OffscreenClipboardMessage>

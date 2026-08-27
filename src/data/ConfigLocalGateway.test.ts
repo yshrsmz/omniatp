@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { AtpSessionData } from '@atproto/api'
+import type { AtpSessionData } from '@atproto/api'
 import { DefaultConfigLocalGateway } from './ConfigLocalGateway'
 import { InMemoryStorageDelegate } from '../test/InMemoryStorageDelegate'
 import { noopLogger } from '../Logger'
@@ -112,7 +112,7 @@ describe('DefaultConfigLocalGateway', () => {
       await gateway.saveSession(sampleSession)
 
       expect(listener).toHaveBeenCalledTimes(1)
-      const [newValue, oldValue] = listener.mock.calls[0]
+      const [newValue, oldValue] = listener.mock.calls[0]!
       expect(newValue).toEqual(sampleSession)
       expect(oldValue).toBeUndefined()
     })

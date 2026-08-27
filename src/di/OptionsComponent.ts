@@ -1,10 +1,10 @@
-import { BskyRepository } from '../data/BskyRepository'
-import { PostTemplateRepository } from '../data/PostTemplateRepository'
-import { AppPreferencesRepository } from '../data/AppPreferencesRepository'
-import { AmazonAssociateRepository } from '../data/AmazonAssociateRepository'
-import { ChromeDelegate } from '../platform/ChromeDelegate'
-import { DataModule } from './DataModule'
-import { PlatformModule } from './PlatformModule'
+import type { BskyRepository } from '../data/BskyRepository'
+import type { PostTemplateRepository } from '../data/PostTemplateRepository'
+import type { AppPreferencesRepository } from '../data/AppPreferencesRepository'
+import type { AmazonAssociateRepository } from '../data/AmazonAssociateRepository'
+import type { ChromeDelegate } from '../platform/ChromeDelegate'
+import type { DataModule } from './DataModule'
+import type { PlatformModule } from './PlatformModule'
 import { getOrCreate } from './helper'
 
 export interface OptionsComponent {

@@ -1,13 +1,10 @@
-import {
-  ChromeDelegate,
-  DefaultChromeDelegate,
-} from '../platform/ChromeDelegate'
-import {
-  ChromeStorageDelegate,
-  DefaultChromeStorageDelegate,
-} from '../platform/ChromeStorageDelegate'
-import { Chrome } from '../utils'
-import { ConsoleLogger, Logger } from '../Logger'
+import type { ChromeDelegate } from '../platform/ChromeDelegate'
+import { DefaultChromeDelegate } from '../platform/ChromeDelegate'
+import type { ChromeStorageDelegate } from '../platform/ChromeStorageDelegate'
+import { DefaultChromeStorageDelegate } from '../platform/ChromeStorageDelegate'
+import type { Chrome } from '../utils'
+import type { Logger } from '../Logger'
+import { ConsoleLogger } from '../Logger'
 import { getOrCreate } from './helper'
 
 export interface PlatformModule {

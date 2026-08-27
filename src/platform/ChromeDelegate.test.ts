@@ -99,8 +99,8 @@ describe('DefaultChromeDelegate.copyToClipboard', () => {
     stub.fireReady()
     await p
 
-    const addOrder = stub.addListener.mock.invocationCallOrder[0]
-    const createOrder = stub.createDocument.mock.invocationCallOrder[0]
+    const addOrder = stub.addListener.mock.invocationCallOrder[0]!
+    const createOrder = stub.createDocument.mock.invocationCallOrder[0]!
     expect(addOrder).toBeLessThan(createOrder)
   })
 
@@ -151,8 +151,8 @@ describe('DefaultChromeDelegate.copyToClipboard', () => {
     await p
 
     expect(stub.closeDocument).toHaveBeenCalledTimes(1)
-    const closeOrder = stub.closeDocument.mock.invocationCallOrder[0]
-    const createOrder = stub.createDocument.mock.invocationCallOrder[0]
+    const closeOrder = stub.closeDocument.mock.invocationCallOrder[0]!
+    const createOrder = stub.createDocument.mock.invocationCallOrder[0]!
     expect(closeOrder).toBeLessThan(createOrder)
   })
 
@@ -165,8 +165,8 @@ describe('DefaultChromeDelegate.copyToClipboard', () => {
 
     expect(stub.createDocument).toHaveBeenCalledTimes(1)
     expect(stub.closeDocument).toHaveBeenCalledTimes(1)
-    const createOrder = stub.createDocument.mock.invocationCallOrder[0]
-    const closeOrder = stub.closeDocument.mock.invocationCallOrder[0]
+    const createOrder = stub.createDocument.mock.invocationCallOrder[0]!
+    const closeOrder = stub.closeDocument.mock.invocationCallOrder[0]!
     expect(createOrder).toBeLessThan(closeOrder)
   })
 

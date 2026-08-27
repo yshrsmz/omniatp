@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import {
+import type {
   AtpAgentOptions,
   AtpSessionData,
   AtpSessionEvent,
@@ -238,7 +238,7 @@ describe('DefaultBskyRepository', () => {
       await repo.createPost('hello')
 
       expect(agent.post).toHaveBeenCalledTimes(1)
-      const args = agent.post.mock.calls[0][0]
+      const args = agent.post.mock.calls[0]![0]
       expect(args.text).toBe('hello')
       expect(args.embed).toBeUndefined()
     })
@@ -253,7 +253,7 @@ describe('DefaultBskyRepository', () => {
       })
 
       expect(agent.post).toHaveBeenCalledTimes(1)
-      const args = agent.post.mock.calls[0][0]
+      const args = agent.post.mock.calls[0]![0]
       expect(args.embed).toEqual({
         $type: 'app.bsky.embed.external',
         external: {

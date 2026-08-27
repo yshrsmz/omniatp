@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Options, Share, Version } from './SubCommands'
 import { createFakeChromeDelegate } from '../test/FakeChromeDelegate'
-import { PostTemplateRepository } from '../data/PostTemplateRepository'
+import type { PostTemplateRepository } from '../data/PostTemplateRepository'
 import { PostTemplate } from '../data/model/PostTemplate'
-import { AmazonAssociateRepository } from '../data/AmazonAssociateRepository'
+import type { AmazonAssociateRepository } from '../data/AmazonAssociateRepository'
 import { AmazonAssociate } from '../data/model/AmazonAssociate'
 
 describe('Options sub-command', () => {

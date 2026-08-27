@@ -2,10 +2,10 @@
 import { computed, ref } from 'vue'
 import SettingsListItem from './SettingsListItem.vue'
 import SignInDialog from './SignInDialog.vue'
-import { AppBskyActorDefs } from '@atproto/api'
+import type { AppBskyActorDefs } from '@atproto/api'
 import SignOutDialog from './SignOutDialog.vue'
 import { AuthProgress } from '../../data/model/AuthProgress'
-import { LoginCredential } from '../../data/model/LoginCredential'
+import type { LoginCredential } from '../../data/model/LoginCredential'
 
 const props = defineProps<{
   service: string

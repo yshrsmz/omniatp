@@ -1,12 +1,13 @@
 import { describe, expect, it, vi } from 'vitest'
 import { XRPCError } from '@atproto/xrpc'
 import { OmniATP } from './OmniATP'
-import { Payload, SubCommand } from './SubCommands'
+import type { Payload, SubCommand } from './SubCommands'
 import { createFakeChromeDelegate } from '../test/FakeChromeDelegate'
-import { BskyRepository } from '../data/BskyRepository'
-import { AppPreferencesRepository } from '../data/AppPreferencesRepository'
-import { Clock } from '../Clock'
-import { Logger, noopLogger } from '../Logger'
+import type { BskyRepository } from '../data/BskyRepository'
+import type { AppPreferencesRepository } from '../data/AppPreferencesRepository'
+import type { Clock } from '../Clock'
+import type { Logger } from '../Logger'
+import { noopLogger } from '../Logger'
 import { createFakeLogger } from '../test/FakeLogger'
 
 const buildBskyRepository = (

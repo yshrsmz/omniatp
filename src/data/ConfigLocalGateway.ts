@@ -1,6 +1,6 @@
-import { AtpSessionData } from '@atproto/api'
-import { ChromeStorageDelegate } from '../platform/ChromeStorageDelegate'
-import { Logger } from '../Logger'
+import type { AtpSessionData } from '@atproto/api'
+import type { ChromeStorageDelegate } from '../platform/ChromeStorageDelegate'
+import type { Logger } from '../Logger'
 import { redactForLogging } from './redact'
 
 export interface ConfigLocalGateway {

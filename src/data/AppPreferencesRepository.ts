@@ -1,4 +1,4 @@
-import { ConfigLocalGateway } from './ConfigLocalGateway'
+import type { ConfigLocalGateway } from './ConfigLocalGateway'
 
 export interface AppPreferencesRepository {
   shouldCopyToClipboardOnPost(): Promise<boolean>

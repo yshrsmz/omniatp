@@ -68,7 +68,8 @@ const parseItem = (raw: string): ChangelogItem => {
   while (true) {
     const match = rest.match(TRAILING_LINK_RE)
     if (!match?.groups) break
-    links.unshift({ text: match.groups.text, url: match.groups.url })
+    // text/url are non-optional captures in TRAILING_LINK_RE, always present once groups matches
+    links.unshift({ text: match.groups.text!, url: match.groups.url! })
     rest = rest.slice(0, match.index).trimEnd()
   }
 
@@ -76,7 +77,8 @@ const parseItem = (raw: string): ChangelogItem => {
   const scopeMatch = rest.match(SCOPE_PREFIX_RE)
   if (scopeMatch?.groups) {
     scope = scopeMatch.groups.scope
-    rest = scopeMatch.groups.rest
+    // rest is a non-optional capture in SCOPE_PREFIX_RE, always present once groups matches
+    rest = scopeMatch.groups.rest!
   }
 
   return {
@@ -156,8 +158,9 @@ export const parseChangelog = (markdown: string): Changelog => {
     const releaseMatch = line.match(RELEASE_HEADING_RE)
     if (releaseMatch?.groups) {
       const { linkVersion, bareVersion, url, date } = releaseMatch.groups
+      // RELEASE_HEADING_RE's alternation guarantees one of linkVersion/bareVersion is present
       currentRelease = {
-        version: linkVersion ?? bareVersion,
+        version: (linkVersion ?? bareVersion)!,
         versionUrl: url,
         date,
         sections: [],
@@ -169,14 +172,16 @@ export const parseChangelog = (markdown: string): Changelog => {
 
     const sectionMatch = line.match(SECTION_HEADING_RE)
     if (sectionMatch?.groups && currentRelease) {
-      currentSection = { title: sectionMatch.groups.title, items: [] }
+      // title is a non-optional capture in SECTION_HEADING_RE, always present once groups matches
+      currentSection = { title: sectionMatch.groups.title!, items: [] }
       currentRelease.sections.push(currentSection)
       continue
     }
 
     const itemMatch = line.match(ITEM_PREFIX_RE)
     if (itemMatch?.groups && currentSection) {
-      currentSection.items.push(parseItem(itemMatch.groups.rest))
+      // rest is a non-optional capture in ITEM_PREFIX_RE, always present once groups matches
+      currentSection.items.push(parseItem(itemMatch.groups.rest!))
       continue
     }
   }

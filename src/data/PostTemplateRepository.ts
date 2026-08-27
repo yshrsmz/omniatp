@@ -1,4 +1,4 @@
-import { ConfigLocalGateway } from './ConfigLocalGateway'
+import type { ConfigLocalGateway } from './ConfigLocalGateway'
 import { PostTemplate } from './model/PostTemplate'
 
 export interface PostTemplateRepository {

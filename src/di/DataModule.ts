@@ -1,29 +1,19 @@
-import { ChromeStorageDelegate } from '../platform/ChromeStorageDelegate'
-import { Clock, DefaultClock } from '../Clock'
-import {
-  ConfigLocalGateway,
-  DefaultConfigLocalGateway,
-} from '../data/ConfigLocalGateway'
-import {
-  AtpAgentFactory,
-  BskyRepository,
-  DefaultBskyRepository,
-} from '../data/BskyRepository'
+import type { ChromeStorageDelegate } from '../platform/ChromeStorageDelegate'
+import type { Clock } from '../Clock'
+import { DefaultClock } from '../Clock'
+import type { ConfigLocalGateway } from '../data/ConfigLocalGateway'
+import { DefaultConfigLocalGateway } from '../data/ConfigLocalGateway'
+import type { AtpAgentFactory, BskyRepository } from '../data/BskyRepository'
+import { DefaultBskyRepository } from '../data/BskyRepository'
 import { getOrCreate } from './helper'
 import { AtpAgent } from '@atproto/api'
-import {
-  DefaultPostTemplateRepository,
-  PostTemplateRepository,
-} from '../data/PostTemplateRepository'
-import {
-  AppPreferencesRepository,
-  DefaultAppPreferencesRepository,
-} from '../data/AppPreferencesRepository'
-import {
-  AmazonAssociateRepository,
-  DefaultAmazonAssociateRepository,
-} from '../data/AmazonAssociateRepository'
-import { Logger } from '../Logger'
+import type { PostTemplateRepository } from '../data/PostTemplateRepository'
+import { DefaultPostTemplateRepository } from '../data/PostTemplateRepository'
+import type { AppPreferencesRepository } from '../data/AppPreferencesRepository'
+import { DefaultAppPreferencesRepository } from '../data/AppPreferencesRepository'
+import type { AmazonAssociateRepository } from '../data/AmazonAssociateRepository'
+import { DefaultAmazonAssociateRepository } from '../data/AmazonAssociateRepository'
+import type { Logger } from '../Logger'
 
 const defaultAtpAgentFactory: AtpAgentFactory = (options) =>
   new AtpAgent(options)

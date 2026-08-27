@@ -3,12 +3,12 @@ import TheHeader from './components/TheHeader.vue'
 import SettingsList from './components/SettingsList/SettingsList.vue'
 import { computed, onMounted, ref } from 'vue'
 import { createOptionsComponent } from './di/factory'
-import { AppBskyActorDefs } from '@atproto/api'
+import type { AppBskyActorDefs } from '@atproto/api'
 import { AuthProgress } from './data/model/AuthProgress'
 import { AppConfig, BskyConfig } from './Configs'
 import { PostTemplate } from './data/model/PostTemplate'
 import { AmazonAssociate } from './data/model/AmazonAssociate'
-import { LoginCredential } from './data/model/LoginCredential'
+import type { LoginCredential } from './data/model/LoginCredential'
 
 const component = createOptionsComponent(chrome)
 

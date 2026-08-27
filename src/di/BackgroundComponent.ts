@@ -1,8 +1,9 @@
 import { OmniATP } from '../background/OmniATP'
-import { Options, Share, SubCommand, Version } from '../background/SubCommands'
-import { ChromeDelegate } from '../platform/ChromeDelegate'
-import { DataModule } from './DataModule'
-import { PlatformModule } from './PlatformModule'
+import type { SubCommand } from '../background/SubCommands'
+import { Options, Share, Version } from '../background/SubCommands'
+import type { ChromeDelegate } from '../platform/ChromeDelegate'
+import type { DataModule } from './DataModule'
+import type { PlatformModule } from './PlatformModule'
 import { getOrCreate } from './helper'
 
 export interface BackgroundComponent {

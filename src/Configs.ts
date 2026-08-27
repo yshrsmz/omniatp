@@ -1,4 +1,4 @@
-import { Developer } from './data/model/Developer'
+import type { Developer } from './data/model/Developer'
 
 export const BskyConfig = {
   service: 'https://bsky.social',

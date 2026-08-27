@@ -1,5 +1,6 @@
-import { Mock, vi } from 'vitest'
-import { Logger } from '../Logger'
+import type { Mock } from 'vitest'
+import { vi } from 'vitest'
+import type { Logger } from '../Logger'
 
 export interface FakeLogger extends Logger {
   log: Mock

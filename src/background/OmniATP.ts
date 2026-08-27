@@ -1,10 +1,10 @@
-import { ChromeDelegate } from '../platform/ChromeDelegate'
-import { Clock } from '../Clock'
-import { BskyRepository } from '../data/BskyRepository'
-import { AppPreferencesRepository } from '../data/AppPreferencesRepository'
-import { Payload, SubCommand } from './SubCommands'
+import type { ChromeDelegate } from '../platform/ChromeDelegate'
+import type { Clock } from '../Clock'
+import type { BskyRepository } from '../data/BskyRepository'
+import type { AppPreferencesRepository } from '../data/AppPreferencesRepository'
+import type { Payload, SubCommand } from './SubCommands'
 import { XRPCError } from '@atproto/xrpc'
-import { Logger } from '../Logger'
+import type { Logger } from '../Logger'
 
 const NOTIFICATION_ICON = 'icon/128.png'
 
