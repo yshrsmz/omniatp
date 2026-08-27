@@ -1,11 +1,12 @@
-import {
-  OFFSCREEN_CLIPBOARD_TARGET,
+import type {
   OffscreenClipboardMessage,
   OffscreenClipboardResponse,
   OffscreenReadyMessage,
 } from './offscreen-messages'
-import { Chrome, escapeText } from '../utils'
-import { Logger } from '../Logger'
+import { OFFSCREEN_CLIPBOARD_TARGET } from './offscreen-messages'
+import type { Chrome } from '../utils'
+import { escapeText } from '../utils'
+import type { Logger } from '../Logger'
 
 const OFFSCREEN_READY_TIMEOUT_MS = 2000
 

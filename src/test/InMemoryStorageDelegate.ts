@@ -1,4 +1,4 @@
-import { ChromeStorageDelegate } from '../platform/ChromeStorageDelegate'
+import type { ChromeStorageDelegate } from '../platform/ChromeStorageDelegate'
 
 type StorageValueType = string | number | boolean | object | null
 
@@ -19,7 +19,7 @@ export class InMemoryStorageDelegate implements ChromeStorageDelegate {
     const result = { ...keysAndDefaults }
     for (const key of Object.keys(keysAndDefaults)) {
       if (key in this.store) {
-        ;(result as Record<string, StorageValueType>)[key] = this.store[key]
+        ;(result as Record<string, StorageValueType>)[key] = this.store[key]!
       }
     }
     return result

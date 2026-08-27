@@ -1,7 +1,7 @@
-import { PostTemplateRepository } from '../data/PostTemplateRepository'
-import { AmazonAssociateRepository } from '../data/AmazonAssociateRepository'
-import { LinkMeta } from '../data/model/LinkMeta'
-import { ChromeDelegate } from '../platform/ChromeDelegate'
+import type { PostTemplateRepository } from '../data/PostTemplateRepository'
+import type { AmazonAssociateRepository } from '../data/AmazonAssociateRepository'
+import type { LinkMeta } from '../data/model/LinkMeta'
+import type { ChromeDelegate } from '../platform/ChromeDelegate'
 
 export interface Payload {
   message: string
@@ -84,7 +84,7 @@ export class Share implements SubCommand {
   extractUserInput(command: string): string | null {
     const match = /^:share\s+([\w\W]+)$/i.exec(command)
     if (match && match.length > 1) {
-      return match[1]
+      return match[1] ?? null
     } else {
       return null
     }

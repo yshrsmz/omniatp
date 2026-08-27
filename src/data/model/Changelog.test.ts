@@ -54,10 +54,10 @@ describe('parseChangelog', () => {
 
     const result = parseChangelog(md)
     expect(result.releases).toHaveLength(1)
-    const release = result.releases[0]
+    const release = result.releases[0]!
     expect(release.sections).toHaveLength(2)
 
-    const features = release.sections[0]
+    const features = release.sections[0]!
     expect(features.title).toBe('Features')
     expect(features.items).toEqual([
       {
@@ -78,7 +78,7 @@ describe('parseChangelog', () => {
       },
     ])
 
-    const bugFixes = release.sections[1]
+    const bugFixes = release.sections[1]!
     expect(bugFixes.title).toBe('Bug Fixes')
     expect(bugFixes.items).toHaveLength(1)
     expect(bugFixes.items[0]).toMatchObject({
@@ -97,7 +97,7 @@ describe('parseChangelog', () => {
 * initial release
 `
     const result = parseChangelog(md)
-    expect(result.releases[0].sections[0].items[0]).toEqual({
+    expect(result.releases[0]!.sections[0]!.items[0]).toEqual({
       scope: undefined,
       description: 'initial release',
       links: [],
@@ -121,8 +121,10 @@ describe('parseChangelog', () => {
 `
     const result = parseChangelog(md)
     expect(result.releases.map((r) => r.version)).toEqual(['0.0.4', '0.0.3'])
-    expect(result.releases[0].sections[0].items[0].description).toBe('later')
-    expect(result.releases[1].sections[0].items[0].description).toBe('earlier')
+    expect(result.releases[0]!.sections[0]!.items[0]!.description).toBe('later')
+    expect(result.releases[1]!.sections[0]!.items[0]!.description).toBe(
+      'earlier'
+    )
   })
 
   it('ignores items that appear before any section', () => {
@@ -133,7 +135,7 @@ describe('parseChangelog', () => {
 * stray item
 `
     const result = parseChangelog(md)
-    expect(result.releases[0].sections).toEqual([])
+    expect(result.releases[0]!.sections).toEqual([])
   })
 
   it('handles preamble paragraphs, emoji section titles, and prose items', () => {
@@ -161,7 +163,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 `
     const result = parseChangelog(md)
     expect(result.releases).toHaveLength(1)
-    const release = result.releases[0]
+    const release = result.releases[0]!
     expect(release.version).toBe('0.20.0')
     expect(release.sections.map((s) => s.title)).toEqual([
       '⚠ BREAKING CHANGES',
@@ -169,13 +171,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
       'Code Refactoring',
     ])
 
-    const breaking = release.sections[0].items[0]
+    const breaking = release.sections[0]!.items[0]!
     expect(breaking.scope).toBeUndefined()
     expect(breaking.description).toContain('Property<String>')
     expect(breaking.description).toContain('packageName = "..."')
     expect(breaking.links).toEqual([])
 
-    const refactor = release.sections[2].items[0]
+    const refactor = release.sections[2]!.items[0]!
     expect(refactor.description).toBe('migrate to Provider API')
     expect(refactor.links).toEqual([
       { text: '5d479eb', url: 'https://example.com/c5d4' },

@@ -1,18 +1,18 @@
-import {
+import type {
   AtpSessionData,
   AtpSessionEvent,
   AtpAgent,
   AtpAgentOptions,
-  RichText,
   AppBskyActorDefs,
   AppBskyEmbedExternal,
   $Typed,
 } from '@atproto/api'
-import { LoginCredential } from './model/LoginCredential'
-import { ConfigLocalGateway } from './ConfigLocalGateway'
-import { LinkMeta } from './model/LinkMeta'
+import { RichText } from '@atproto/api'
+import type { LoginCredential } from './model/LoginCredential'
+import type { ConfigLocalGateway } from './ConfigLocalGateway'
+import type { LinkMeta } from './model/LinkMeta'
 import { BskyConfig } from '../Configs'
-import { Logger } from '../Logger'
+import type { Logger } from '../Logger'
 import { redactForLogging } from './redact'
 
 export interface BskyRepository {
