@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.0.8](https://github.com/yshrsmz/omniatp/compare/v0.0.7...v0.0.8) (2026-09-04)
+
+
+### Bug Fixes
+
+* add pointer cursor and hover affordance to clickable settings ([#145](https://github.com/yshrsmz/omniatp/issues/145)) ([47836f2](https://github.com/yshrsmz/omniatp/commit/47836f2a312de2a307b605ad1cedf04be3bd039d))
+* **deps:** update dependency @atproto/api to v0.20.41 ([#172](https://github.com/yshrsmz/omniatp/issues/172)) ([ee36779](https://github.com/yshrsmz/omniatp/commit/ee36779c46f567ca1d047a7809db609565dfe160))
+* **deps:** update npm dependencies ([#157](https://github.com/yshrsmz/omniatp/issues/157)) ([9470632](https://github.com/yshrsmz/omniatp/commit/94706321b3a1222ab95822e0ea62c51c5e5daf39))
+* **deps:** update npm dependencies ([#165](https://github.com/yshrsmz/omniatp/issues/165)) ([69a00ab](https://github.com/yshrsmz/omniatp/commit/69a00ab24782bddec8df529035352bc6c433a329))
+* **SettingsList:** drop dead `!border-t-0` on ChangelogItem ([#149](https://github.com/yshrsmz/omniatp/issues/149)) ([d6521da](https://github.com/yshrsmz/omniatp/commit/d6521da61af0a30d445863659c15f30d02c15544))
+
 ## [0.0.7](https://github.com/yshrsmz/omniatp/compare/v0.0.6...v0.0.7) (2026-05-23)
 
 
