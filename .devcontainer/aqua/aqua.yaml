@@ -9,4 +9,4 @@ packages:
   - name: starship/starship@v1.26.0
   - name: junegunn/fzf@v0.74.3
   - name: pnpm/pnpm@v10.34.5
-  - name: astral-sh/uv@0.12.5
+  - name: astral-sh/uv@0.12.7
