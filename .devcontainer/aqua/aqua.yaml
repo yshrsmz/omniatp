@@ -8,5 +8,5 @@ registries:
 packages:
   - name: starship/starship@v1.26.0
   - name: junegunn/fzf@v0.74.4
-  - name: pnpm/pnpm@v10.34.5
-  - name: astral-sh/uv@0.12.19
+  - name: pnpm/pnpm@v10.34.6
+  - name: astral-sh/uv@0.12.23
