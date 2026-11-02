@@ -27,7 +27,7 @@ jobs:
 
       - name: Read tools from mise.toml 🛠
         id: mise
-        uses: yshrsmz/action-mise-values@0232745164a9f8be5a159c7085291db99f9b84e9 # v0.3.1
+        uses: yshrsmz/action-mise-values@6aeaf30561756fec5cc545d36ceb1d2dfa00c9e1 # v0.3.2
 
       - name: Setup node env 🏗
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
