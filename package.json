@@ -32,7 +32,7 @@
     "@tailwindcss/forms": "0.5.11",
     "@tailwindcss/vite": "4.3.3",
     "@types/chrome": "0.3.5",
-    "@vitejs/plugin-vue": "6.0.10",
+    "@vitejs/plugin-vue": "6.0.11",
     "@vitest/coverage-v8": "4.1.12",
     "@vue/test-utils": "2.5.1",
     "@wxt-dev/module-vue": "1.0.3",
