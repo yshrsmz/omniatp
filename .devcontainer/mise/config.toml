@@ -1,4 +1,4 @@
 [tools]
-"node" = "24.22.2"
-"npm:@anthropic-ai/claude-code" = "2.1.317"
-"npm:@openai/codex" = "0.166.0"
+"node" = "24.22.3"
+"npm:@anthropic-ai/claude-code" = "2.1.322"
+"npm:@openai/codex" = "0.167.2"
